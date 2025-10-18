@@ -49,17 +49,18 @@ A seguir, são detalhados os pontos de melhoria identificados a partir de uma an
 ### **Colega 2: [Aguardando Feedback]**
 
 - **Data:** [15/10/2025]
-- **Sugestão:**
-- **Análise e Decisão:**
+- **Sugestão:** _"Consigo acompanhar meu pedido atual, o que é ótimo. Mas e se eu quisesse ver os detalhes de um pedido que fiz na semana passada ou até repetir uma compra? Senti falta de um histórico de pedidos na minha conta."_
+- **Análise e Decisão:** A sugestão é excelente, pois um histórico de pedidos aumenta o engajamento e a recorrência de compras do cliente. A funcionalidade se encaixa perfeitamente na área "Minha Conta", já planejada na autoavaliação. A implementação é viável e agrega muito valor à experiência do usuário. **Decisão: Acatada.** Será criada uma nova história de usuário para "Visualizar Histórico de Pedidos".
 
 ## **4. Plano de Ação e Impacto na Documentação**
 
-Com base na análise crítica e nos feedbacks, o seguinte plano de ação será executado para atualizar a documentação do projeto antes de iniciar a codificação.
+Com base na análise crítica e nos feedbacks, o seguinte plano de ação será executado para atualizar a documentação do projeto antes de iniciar a codificação. A tabela abaixo detalha cada melhoria, os artefatos de especificação que serão impactados e o status atual da tarefa.
 
-| ID  | Ação de Melhoria                         | Artefato(s) a ser(em) Atualizado(s)                       | Status      |
-| :-: | :--------------------------------------- | :-------------------------------------------------------- | :---------- |
-| 01  | Adicionar busca de produtos              | Backlog, Diagrama de Casos de Uso, Wireframes (`TELA001`) | `[A FAZER]` |
-| 02  | Adicionar gerenciamento de perfil        | Backlog, Diagrama de Casos de Uso, Diagrama de Classes    | `[A FAZER]` |
-| 03  | Adicionar edição/desativação de produtos | Backlog, Diagrama de Casos de Uso, Diagrama de Classes    | `[A FAZER]` |
-| 04  | Simplificar fluxo de pagamento           | Backlog (reescrever História #8), Casos de Uso Expandidos | `[A FAZER]` |
-| 05  | Detalhar segurança da API                | Adicionar como Requisito Não Funcional na especificação   | `[A FAZER]` |
+| ID  | Ação de Melhoria                              | Artefato(s) a ser(em) Atualizado(s)                               | Status      |
+| :-: | :-------------------------------------------- | :---------------------------------------------------------------- | :---------- |
+| 01  | Adicionar busca de produtos por nome          | Backlog (nova história), Casos de Uso, Wireframes (`TELA001`)     | `[A FAZER]` |
+| 02  | Adicionar gerenciamento de perfil do usuário  | Backlog (nova história), Casos de Uso, Diagrama de Classes        | `[A FAZER]` |
+| 03  | Adicionar edição e desativação de produtos    | Backlog (novas histórias), Casos de Uso, Diagrama de Classes      | `[A FAZER]` |
+| 04  | **Adicionar histórico de pedidos do cliente** | **Backlog (nova história), Casos de Uso, Wireframes (nova tela)** | `[A FAZER]` |
+| 05  | Simplificar fluxo de pagamento (simulação)    | Backlog (reescrever História #8), Casos de Uso Expandidos         | `[A FAZER]` |
+| 06  | Detalhar segurança da API com tokens          | Adicionar como Requisito Não Funcional na especificação           | `[A FAZER]` |
