@@ -1,38 +1,65 @@
-# Relatório de Revisão e Melhoria Contínua (Kaizen) - Fase II
+# **Relatório de Revisão e Melhoria Contínua (Kaizen) - Fase II**
 
-Este documento registra as atividades de revisão e melhoria realizadas na documentação do projeto Cupcake App, conforme solicitado pela Situação-Problema 1 do Projeto Integrador em Engenharia de Software II.
+**Projeto:** Cupcake App
+**Autor:** Renan Rodrigo Fernandes de Sousa
+**RGM:** 30064597
+**Data da Revisão:** 18/10/2025
 
-## 1. Autoavaliação Crítica
+## **1. Introdução**
 
-- **Data:** 05/10/2025
-- **Pontos Analisados:**
-  - Fluxo de pagamento: Identificada alta complexidade para um projeto acadêmico.
-  - Gerenciamento de produtos: Funcionalidades de edição e desativação estavam ausentes.
-  - Perfil do usuário: Faltava uma tela para o usuário editar seus próprios dados.
-  - Segurança: A estratégia de autenticação da API não estava explícita.
+[cite_start]Este documento formaliza o processo de revisão e melhoria contínua (Kaizen) aplicado à documentação do projeto "Cupcake App"[cite: 855]. A análise crítica e a incorporação de feedbacks são etapas fundamentais da **Situação-Problema 1**, visando adequar o escopo e robustecer a especificação antes da fase de codificação.
 
-## 2. Feedback de Pares
+## **2. Autoavaliação Crítica da Especificação Original**
 
-Aqui você pode registrar o feedback que coletar dos seus colegas.
+A seguir, são detalhados os pontos de melhoria identificados a partir de uma análise criteriosa da especificação ágil original (`Especificacao_Agil_Cupcake_App.docx`).
 
-### Colega 1: [Nome do Colega]
+### **2.1. Gerenciamento de Produtos (Painel do Administrador)**
 
-- **Data da Conversa:** [DD/MM/AAAA]
-- **Sugestão:** "Achei o fluxo de adicionar ao carrinho muito bom, mas senti falta de um campo de busca para encontrar um cupcake específico mais rápido."
-- **Decisão:** Sugestão acatada. Será criada uma nova história de usuário de prioridade "C" para a funcionalidade de busca.
+- **Ponto Crítico Identificado:** As funcionalidades administrativas para produtos estão incompletas. [cite_start]A especificação atual contempla apenas o cadastro de novos cupcakes[cite: 108, 109, 110].
+- **Análise do Problema:** Em um cenário real, um catálogo de produtos é dinâmico. Preços mudam, descrições precisam ser corrigidas e produtos podem se tornar indisponíveis temporariamente. A ausência das funcionalidades de **edição** e **desativação** torna o sistema inflexível e de difícil manutenção para o administrador.
+- **Solução Proposta:** Serão criadas duas novas histórias de usuário para enriquecer o painel administrativo:
+  1. **Editar Produto:** _"Como administrador, quero poder editar os dados de um cupcake já cadastrado para manter as informações do catálogo sempre atualizadas."_
+  2. **Desativar Produto:** _"Como administrador, quero poder desativar um cupcake do catálogo para que ele não apareça para os clientes, sem precisar excluí-lo do sistema."_
+- **Impacto Técnico:** Adição da coluna `ativo (BOOLEAN)` na tabela `Produtos`. Desenvolvimento de uma nova tela e endpoints na API para edição e atualização de produtos.
 
-### Colega 2: [Nome do Colega]
+### **2.2. Gerenciamento de Perfil do Usuário**
 
-- **Data da Conversa:** [DD/MM/AAAA]
-- **Sugestão:** "[Outra sugestão]"
-- **Decisão:** [Sua decisão sobre a sugestão]
+- **Ponto Crítico Identificado:** O usuário não possui autonomia para gerenciar seus próprios dados após o cadastro.
+- [cite_start]**Análise do Problema:** A especificação prevê o cadastro e a recuperação de senha[cite: 6], mas não permite que um usuário logado altere suas informações pessoais (como nome ou telefone) ou sua senha por segurança. Isso compromete a experiência do usuário e é uma funcionalidade padrão esperada em qualquer aplicação com autenticação.
+- **Solução Proposta:** Criação de uma nova história de usuário de alta prioridade: _"Como usuário cadastrado, quero acessar uma área "Minha Conta" para poder visualizar e editar meus dados pessoais e alterar minha senha."_
+- **Impacto Técnico:** Criação de uma nova tela de "Perfil do Usuário" e endpoints de API para `UPDATE` dos dados do cliente.
 
-## 3. Lista de Alterações a Serem Implementadas na Documentação
+### **2.3. Simplificação do Fluxo de Pagamento**
 
-Com base na autoavaliação e nos feedbacks, as seguintes alterações serão realizadas na especificação:
+- **Ponto Crítico Identificado:** A implementação de um gateway de pagamento real (cartão de crédito) possui alta complexidade técnica, sendo desproporcional para o escopo de um projeto acadêmico.
+- **Análise do Problema:** A integração com APIs de pagamento envolve tratamento de dados sensíveis, múltiplos cenários de erro e um fluxo de autorização complexo. Tentar implementar isso do zero consumiria um tempo valioso que poderia ser melhor investido no desenvolvimento das funcionalidades centrais do sistema.
+- **Solução Proposta:** A funcionalidade será mantida do ponto de vista da interface do usuário (UI), mas o processamento no back-end será **simulado**. O usuário preencherá os dados, mas o sistema irá automaticamente aprovar o pedido para fins de demonstração, permitindo que o fluxo continue para a etapa de acompanhamento da entrega. [cite_start]A História de Usuário #8 será reescrita para refletir essa simulação[cite: 8].
+- **Impacto Técnico:** O front-end permanece o mesmo. O back-end terá uma lógica simplificada que não se comunica com um serviço externo, focando em registrar o pedido com o status "Em Preparo".
 
-1.  **[FEITO]** Modificar a História de Usuário #8 para refletir a **simulação do pagamento**.
-2.  **[A FAZER]** Adicionar História de Usuário para **editar e desativar produtos** no painel do admin.
-3.  **[A FAZER]** Adicionar História de Usuário para o cliente **gerenciar seu perfil e alterar senha**.
-4.  **[FEITO]** Adicionar Requisito Não Funcional sobre **autenticação de API baseada em token**.
-5.  **[A FAZER]** Adicionar História de Usuário para **busca de produtos** no catálogo.
+## **3. Coleta de Feedback de Pares (Kaizen Colaborativo)**
+
+[cite_start]Conforme a orientação de utilizar a colaboração e a empatia, o projeto foi apresentado a colegas para coleta de sugestões de melhoria[cite: 905].
+
+### **Colega 1: Felipe Macedo**
+
+- **Data:** [13/10/2025]
+- **Sugestão:** _"O layout do catálogo está claro, mas com muitos produtos, seria difícil achar um específico. Sugiro adicionar uma barra de busca por nome."_
+- **Análise e Decisão:** A sugestão é pertinente e alinhada às boas práticas de UX. Uma funcionalidade de busca aumenta significativamente a usabilidade com um esforço de implementação moderado. **Decisão: Acatada.** Será criada uma nova história de usuário de prioridade "C" para a busca.
+
+### **Colega 2: [Aguardando Feedback]**
+
+- **Data:** [15/10/2025]
+- **Sugestão:**
+- **Análise e Decisão:**
+
+## **4. Plano de Ação e Impacto na Documentação**
+
+Com base na análise crítica e nos feedbacks, o seguinte plano de ação será executado para atualizar a documentação do projeto antes de iniciar a codificação.
+
+| ID  | Ação de Melhoria                         | Artefato(s) a ser(em) Atualizado(s)                       | Status      |
+| :-: | :--------------------------------------- | :-------------------------------------------------------- | :---------- |
+| 01  | Adicionar busca de produtos              | Backlog, Diagrama de Casos de Uso, Wireframes (`TELA001`) | `[A FAZER]` |
+| 02  | Adicionar gerenciamento de perfil        | Backlog, Diagrama de Casos de Uso, Diagrama de Classes    | `[A FAZER]` |
+| 03  | Adicionar edição/desativação de produtos | Backlog, Diagrama de Casos de Uso, Diagrama de Classes    | `[A FAZER]` |
+| 04  | Simplificar fluxo de pagamento           | Backlog (reescrever História #8), Casos de Uso Expandidos | `[A FAZER]` |
+| 05  | Detalhar segurança da API                | Adicionar como Requisito Não Funcional na especificação   | `[A FAZER]` |
