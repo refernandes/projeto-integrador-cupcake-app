@@ -56,15 +56,17 @@ Conforme a orientação de utilizar a colaboração e a empatia, o projeto foi a
 
 - **Decisão: Acatada.** Será criada uma nova história de usuário para "Visualizar Histórico de Pedidos".
 
-## **4. Plano de Ação e Impacto na Documentação**
+## 4. Plano de Ação e Impacto na Documentação
 
-Com base na análise crítica e nos feedbacks, o seguinte plano de ação será executado para atualizar a documentação do projeto antes de iniciar a codificação. A tabela abaixo detalha cada melhoria, os artefatos de especificação que serão impactados e o status atual da tarefa.
+Com base na análise crítica e nos feedbacks, o seguinte plano de ação foi executado para atualizar a documentação do projeto antes de iniciar a codificação. A tabela abaixo detalha cada melhoria, os artefatos de especificação que foram impactados e o status final da tarefa.
 
-| ID  | Ação de Melhoria                             | Artefato(s) a ser(em) Atualizado(s)                           | Status      |
-| :-: | :------------------------------------------- | :------------------------------------------------------------ | :---------- |
-| 01  | Adicionar busca de produtos por nome         | Backlog (nova história), Casos de Uso, Wireframes (`TELA001`) | `[A FAZER]` |
-| 02  | Adicionar gerenciamento de perfil do usuário | Backlog (nova história), Casos de Uso, Diagrama de Classes    | `[A FAZER]` |
-| 03  | Adicionar edição e desativação de produtos   | Backlog (novas histórias), Casos de Uso, Diagrama de Classes  | `[A FAZER]` |
-| 04  | Adicionar histórico de pedidos do cliente    | Backlog (nova história), Casos de Uso, Wireframes (nova tela) | `[A FAZER]` |
-| 05  | Simplificar fluxo de pagamento (simulação)   | Backlog (reescrever História #8), Casos de Uso Expandidos     | `[A FAZER]` |
-| 06  | Detalhar segurança da API com tokens         | Adicionar como Requisito Não Funcional na especificação       | `[A FAZER]` |
+| ID  | Ação de Melhoria                             | Artefato(s) a ser(em) Atualizado(s)                           | Status    |
+| :-: | :------------------------------------------- | :------------------------------------------------------------ | :-------- |
+| 01  | Adicionar busca de produtos por nome         | Backlog (nova história), Casos de Uso, Wireframes (`TELA001`) | `[FEITO]` |
+| 02  | Adicionar gerenciamento de perfil do usuário | Backlog (nova história), Casos de Uso, Diagrama de Classes    | `[FEITO]` |
+| 03  | Adicionar edição e desativação de produtos   | Backlog (novas histórias), Casos de Uso, Diagrama de Classes  | `[FEITO]` |
+| 04  | Adicionar histórico de pedidos do cliente    | Backlog (nova história), Casos de Uso, Wireframes (nova tela) | `[FEITO]` |
+| 05  | Simplificar fluxo de pagamento (simulação)   | Backlog (reescrever História #8), Casos de Uso Expandidos     | `[FEITO]` |
+| 06  | Detalhar segurança da API com tokens         | Adicionar como Requisito Não Funcional na especificação       | `[FEITO]` |
+
+**Conclusão da Revisão:** Todas as tarefas planejadas foram concluídas e implementadas na documentação `Especificacao_Agil_Cupcake_App_v2.docx`. O projeto está agora em um estado consistente e pronto para a próxima fase.
