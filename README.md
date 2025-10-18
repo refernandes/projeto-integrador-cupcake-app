@@ -1,0 +1,3 @@
+# Cupcake App Project
+
+Welcome to the documentation for the Cupcake App. This file outlines the project plan...
