@@ -1,0 +1,64 @@
+// Local: /backend/src/main/java/br/com/cupcakeapp/backend/service/ProdutoService.java
+package br.com.cupcakeapp.backend.service;
+
+import br.com.cupcakeapp.backend.model.Produto;
+import br.com.cupcakeapp.backend.repository.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ProdutoService {
+
+    private final ProdutoRepository produtoRepository;
+
+    @Autowired
+    public ProdutoService(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
+    }
+
+    /**
+     * Lista todos os produtos ativos. Se um termo de busca for fornecido,
+     * filtra pelo nome do produto.
+     */
+    public List<Produto> listarProdutosAtivos(String nome) {
+        if (nome != null && !nome.isEmpty()) {
+            return produtoRepository.findByNomeContainingIgnoreCaseAndAtivoTrue(nome);
+        }
+        return produtoRepository.findByAtivoTrue();
+    }
+
+    /**
+     * Busca um único produto pelo seu ID. Lança uma exceção se não for encontrado.
+     */
+    public Produto buscarPorId(Integer id) {
+        return produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado com o ID: " + id));
+    }
+    
+    // --- MÉTODOS DE ADMINISTRAÇÃO ---
+
+    public Produto criar(Produto produto) {
+        return produtoRepository.save(produto);
+    }
+
+    public Produto atualizar(Integer id, Produto produtoAtualizado) {
+        Produto produtoExistente = buscarPorId(id); // Reusa o método de busca
+        
+        // Atualiza os campos
+        produtoExistente.setNome(produtoAtualizado.getNome());
+        produtoExistente.setDescricao(produtoAtualizado.getDescricao());
+        produtoExistente.setPreco(produtoAtualizado.getPreco());
+        produtoExistente.setEstoque(produtoAtualizado.getEstoque());
+        // ... outros campos ...
+        
+        return produtoRepository.save(produtoExistente);
+    }
+    
+    public void alterarStatus(Integer id, boolean ativo) {
+        Produto produto = buscarPorId(id);
+        produto.setAtivo(ativo);
+        produtoRepository.save(produto);
+    }
+}

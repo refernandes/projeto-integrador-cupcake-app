@@ -12,8 +12,8 @@ Este repositório contém todos os artefatos do projeto "Cupcake App", desenvolv
   - [Sobre o Projeto](#sobre-o-projeto)
   - [Estrutura do Repositório](#estrutura-do-repositório)
   - [Principais Funcionalidades (v2.0)](#principais-funcionalidades-v20)
-    - [Para Clientes:](#para-clientes)
-    - [Para Administradores:](#para-administradores)
+    - [Para Clientes](#para-clientes)
+    - [Para Administradores](#para-administradores)
   - [Documentação Principal](#documentação-principal)
   - [Próximos Passos (Situação-Problema 2)](#próximos-passos-situação-problema-2)
   - [Autor](#autor)
@@ -48,7 +48,7 @@ O projeto está organizado da seguinte forma para facilitar a navegação e a av
 
 A versão 2.0 do projeto, após a fase de revisão, contempla as seguintes funcionalidades:
 
-#### Para Clientes:
+### Para Clientes
 
 - **Autenticação Completa:** Cadastro, login e recuperação de senha.
 - **Gerenciamento de Conta:** Visualização e edição de dados pessoais e alteração de senha.
@@ -56,7 +56,7 @@ A versão 2.0 do projeto, após a fase de revisão, contempla as seguintes funci
 - **Jornada de Compra Completa:** Adicionar/remover itens do carrinho, selecionar endereço e finalizar pedido com pagamento simulado.
 - **Pós-venda:** Acompanhamento do status do pedido em tempo real e acesso ao histórico de compras.
 
-#### Para Administradores:
+### Para Administradores
 
 - **Gerenciamento de Produtos:** Cadastro, edição de informações, controle de estoque e ativação/desativação de cupcakes no catálogo.
 - **Gerenciamento de Pedidos:** Visualização de todos os pedidos recebidos, com filtros por status e capacidade de alterar o andamento da entrega.
