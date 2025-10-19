@@ -1,6 +1,7 @@
 // Local: /backend/src/main/java/br/com/cupcakeapp/backend/service/ProdutoService.java
 package br.com.cupcakeapp.backend.service;
 
+import br.com.cupcakeapp.backend.dto.ProdutoRequestDTO;
 import br.com.cupcakeapp.backend.model.Produto;
 import br.com.cupcakeapp.backend.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,4 +62,51 @@ public class ProdutoService {
         produto.setAtivo(ativo);
         produtoRepository.save(produto);
     }
+
+    /**
+ * Cria um novo produto a partir de um DTO.
+ */
+public Produto criar(ProdutoRequestDTO produtoDTO) {
+    Produto novoProduto = new Produto();
+    novoProduto.setNome(produtoDTO.getNome());
+    novoProduto.setDescricao(produtoDTO.getDescricao());
+    novoProduto.setPreco(produtoDTO.getPreco());
+    novoProduto.setSabor(produtoDTO.getSabor());
+    novoProduto.setImagemUrl(produtoDTO.getImagemUrl());
+    novoProduto.setEstoque(produtoDTO.getEstoque());
+    novoProduto.setAtivo(true); // Novos produtos são ativos por padrão
+
+    return produtoRepository.save(novoProduto);
+}
+
+/**
+ * Atualiza um produto existente a partir de um DTO.
+ */
+public Produto atualizar(Integer id, ProdutoRequestDTO produtoDTO) {
+    Produto produtoExistente = buscarPorId(id); // Reusa o método que já valida se o produto existe
+
+    // Atualiza os campos do produto existente com os dados do DTO
+    produtoExistente.setNome(produtoDTO.getNome());
+    produtoExistente.setDescricao(produtoDTO.getDescricao());
+    produtoExistente.setPreco(produtoDTO.getPreco());
+    produtoExistente.setSabor(produtoDTO.getSabor());
+    produtoExistente.setImagemUrl(produtoDTO.getImagemUrl());
+    produtoExistente.setEstoque(produtoDTO.getEstoque());
+
+    return produtoRepository.save(produtoExistente);
+}
+
+
+/**
+ * Deleta um produto do banco de dados.
+ */
+public void deletar(Integer id) {
+    // Verifica se o produto existe antes de tentar deletar
+    if (!produtoRepository.existsById(id)) {
+        throw new RuntimeException("Produto não encontrado com o ID: " + id);
+    }
+    produtoRepository.deleteById(id);
+}
+
+    
 }

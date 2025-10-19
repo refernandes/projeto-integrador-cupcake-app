@@ -2,6 +2,7 @@
 package br.com.cupcakeapp.backend.service;
 
 import br.com.cupcakeapp.backend.dto.ClienteCadastroDTO;
+import br.com.cupcakeapp.backend.dto.PerfilUpdateRequestDTO;
 import br.com.cupcakeapp.backend.model.Cliente;
 import br.com.cupcakeapp.backend.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,4 +44,23 @@ public class ClienteService {
     }
 
     // Adicione aqui os métodos para buscar e atualizar perfil...
+    /**
+ * Busca o perfil de um cliente pelo seu ID.
+ */
+public Cliente buscarPerfil(Integer clienteId) {
+    return clienteRepository.findById(clienteId)
+            .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID: " + clienteId));
+}
+
+/**
+ * Atualiza os dados do perfil de um cliente.
+ */
+public Cliente atualizarPerfil(Integer clienteId, PerfilUpdateRequestDTO perfilDTO) {
+    Cliente clienteExistente = buscarPerfil(clienteId); // Reusa o método de busca
+
+    clienteExistente.setNome(perfilDTO.getNome());
+    clienteExistente.setTelefone(perfilDTO.getTelefone());
+
+    return clienteRepository.save(clienteExistente);
+}
 }

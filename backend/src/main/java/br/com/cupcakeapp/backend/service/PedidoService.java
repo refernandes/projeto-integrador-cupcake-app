@@ -92,4 +92,18 @@ public class PedidoService {
     public List<Pedido> buscarPorCliente(Integer clienteId) {
         return pedidoRepository.findByClienteIdOrderByDataPedidoDesc(clienteId);
     }
+    /**
+ * Busca um pedido específico pelo seu ID, garantindo que ele pertença ao cliente informado.
+ */
+public Pedido buscarPorIdECliente(Integer pedidoId, Integer clienteId) {
+    Pedido pedido = pedidoRepository.findById(pedidoId)
+            .orElseThrow(() -> new RuntimeException("Pedido não encontrado com o ID: " + pedidoId));
+
+    // Regra de negócio: um cliente só pode ver seus próprios pedidos.
+    if (!pedido.getCliente().getId().equals(clienteId)) {
+        throw new RuntimeException("Acesso negado. Este pedido não pertence ao cliente informado.");
+    }
+
+    return pedido;
+}
 }
