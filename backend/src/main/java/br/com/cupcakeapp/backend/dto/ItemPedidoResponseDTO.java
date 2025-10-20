@@ -13,11 +13,13 @@ public class ItemPedidoResponseDTO {
     private Integer quantidade;
     private BigDecimal precoUnitario;
     private BigDecimal subtotal;
+    private String imagemUrl;
 
     public ItemPedidoResponseDTO(ItemPedido itemPedido) {
         this.nomeProduto = itemPedido.getProduto().getNome();
         this.quantidade = itemPedido.getQuantidade();
         this.precoUnitario = itemPedido.getPrecoUnitario();
         this.subtotal = itemPedido.getSubtotal();
+        this.imagemUrl = itemPedido.getProduto().getImagemUrl();
     }
 }

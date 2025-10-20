@@ -149,7 +149,7 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
             <img
               src={cupcake.image}
               alt={cupcake.name}
-              className="w-full h-32 object-cover cursor-pointer"
+              className="w-full aspect-square object-cover cursor-pointer"
               onClick={() =>
                 setRoute({ name: "productDetail", product: cupcake })
               }

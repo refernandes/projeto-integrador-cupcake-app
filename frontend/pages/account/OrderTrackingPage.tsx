@@ -104,9 +104,11 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({
                                          {" "}
               {/* Não temos a imagem do cupcake neste DTO, então colocamos um placeholder */}
                                          {" "}
-              <div className="w-16 h-16 rounded-md bg-gray-100 flex items-center justify-center text-gray-400">
-                ?
-              </div>
+              <img
+                src={item.imagemUrl}
+                alt={item.nomeProduto}
+                className="w-16 h-16 rounded-md object-cover"
+              />
                                          {" "}
               <div className="flex-grow ml-4">
                                                {" "}
