@@ -4,6 +4,7 @@ package br.com.cupcakeapp.backend.controller;
 
 import br.com.cupcakeapp.backend.dto.*;
 import br.com.cupcakeapp.backend.model.Cliente;
+import br.com.cupcakeapp.backend.model.Endereco;
 import br.com.cupcakeapp.backend.model.Pedido;
 import br.com.cupcakeapp.backend.service.ClienteService;
 import br.com.cupcakeapp.backend.service.PedidoService;
@@ -76,5 +77,30 @@ public class ContaController {
             @AuthenticationPrincipal Cliente clienteLogado) {
         Cliente clienteAtualizado = clienteService.atualizarPerfil(clienteLogado.getId(), perfilDTO);
         return ResponseEntity.ok(new ClienteResponseDTO(clienteAtualizado));
+    }
+    // ADICIONE ESTES MÉTODOS DENTRO DA CLASSE ContaController
+
+    // --- Endpoints de Endereços ---
+
+    /**
+     * Endpoint para buscar todos os endereços do cliente logado.
+     * URL: GET /api/conta/enderecos
+     */
+    @GetMapping("/enderecos")
+    public ResponseEntity<List<Endereco>> listarEnderecos(@AuthenticationPrincipal Cliente clienteLogado) {
+        List<Endereco> enderecos = clienteService.buscarEnderecosPorCliente(clienteLogado.getId());
+        return ResponseEntity.ok(enderecos);
+    }
+
+    /**
+     * Endpoint para adicionar um novo endereço para o cliente logado.
+     * URL: POST /api/conta/enderecos
+     */
+    @PostMapping("/enderecos")
+    public ResponseEntity<Endereco> adicionarEndereco(
+            @AuthenticationPrincipal Cliente clienteLogado,
+            @Valid @RequestBody EnderecoDTO enderecoDTO) {
+        Endereco novoEndereco = clienteService.adicionarEndereco(clienteLogado.getId(), enderecoDTO);
+        return ResponseEntity.status(201).body(novoEndereco);
     }
 }
