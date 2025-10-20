@@ -151,7 +151,7 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
               alt={cupcake.name}
               className="w-full h-32 object-cover cursor-pointer"
               onClick={() =>
-                setRoute({ name: "productDetail", id: cupcake.id })
+                setRoute({ name: "productDetail", product: cupcake })
               }
             />
             <div className="p-3 flex flex-col flex-grow">

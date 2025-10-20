@@ -1,4 +1,3 @@
-
 export interface Cupcake {
   id: number;
   name: string;
@@ -50,23 +49,23 @@ export interface Order {
   address: Address;
 }
 
-export type Route = 
-  | { name: 'login' }
-  | { name: 'register' }
-  | { name: 'forgotPassword' }
-  | { name: 'catalog' }
-  | { name: 'productDetail', id: number }
-  | { name: 'cart' }
-  | { name: 'deliveryAddress' }
-  | { name: 'payment' }
-  | { name: 'orderConfirmation', orderId: string }
-  | { name: 'orderTracking', orderId: string }
-  | { name: 'account' }
-  | { name: 'editProfile' }
-  | { name: 'orderHistory' }
-  | { name: 'adminLogin' }
-  | { name: 'adminDashboard' }
-  | { name: 'adminManageProducts' }
-  | { name: 'adminProductForm', id?: number }
-  | { name: 'adminManageOrders' }
-  | { name: 'adminOrderDetail', orderId: string };
+export type Route =
+  | { name: "login" }
+  | { name: "register" }
+  | { name: "forgotPassword" }
+  | { name: "catalog" }
+  | { name: "productDetail"; product: Cupcake }
+  | { name: "cart" }
+  | { name: "deliveryAddress" }
+  | { name: "payment" }
+  | { name: "orderConfirmation"; orderId: string }
+  | { name: "orderTracking"; orderId: string }
+  | { name: "account" }
+  | { name: "editProfile" }
+  | { name: "orderHistory" }
+  | { name: "adminLogin" }
+  | { name: "adminDashboard" }
+  | { name: "adminManageProducts" }
+  | { name: "adminProductForm"; id?: number }
+  | { name: "adminManageOrders" }
+  | { name: "adminOrderDetail"; orderId: string };

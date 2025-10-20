@@ -46,21 +46,37 @@ const App: React.FC = () => {
     if (token) {
       const fetchUserData = async () => {
         try {
-          const [profileResponse, addressResponse] = await Promise.all([
+          const [
+            profileResponse,
+            addressResponse,
+            ordersResponse,
+            productsResponse,
+          ] = await Promise.all([
             fetch(`${API_BASE_URL}/api/conta/perfil`, {
               headers: { Authorization: `Bearer ${token}` },
             }),
             fetch(`${API_BASE_URL}/api/conta/enderecos`, {
               headers: { Authorization: `Bearer ${token}` },
             }),
+            fetch(`${API_BASE_URL}/api/conta/pedidos`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+            fetch(`${API_BASE_URL}/api/produtos`),
           ]);
 
-          if (!profileResponse.ok || !addressResponse.ok) {
+          if (
+            !profileResponse.ok ||
+            !addressResponse.ok ||
+            !ordersResponse.ok ||
+            !productsResponse.ok
+          ) {
             throw new Error("Sessão inválida ou expirada.");
           }
 
           const userData = await profileResponse.json();
           const addressData = await addressResponse.json();
+          const ordersData = await ordersResponse.json();
+          const productsData = await productsResponse.json();
 
           setCurrentUser({
             id: userData.id,
@@ -73,6 +89,8 @@ const App: React.FC = () => {
           if (addressData.length > 0) {
             setDeliveryAddress(addressData[0]);
           }
+          setOrders(ordersData);
+          setProducts(productsData);
         } catch (error) {
           console.error("Falha ao carregar dados do usuário:", error);
           onLogout();
@@ -222,7 +240,7 @@ const App: React.FC = () => {
 
       // 5. Limpa o carrinho e atualiza o estado de pedidos em caso de sucesso.
       setCart([]);
-      setOrders((prevOrders) => [...prevOrders, newOrder]);
+      setOrders((prevOrders) => [newOrder, ...prevOrders]);
 
       return newOrder;
     } catch (error) {
@@ -257,16 +275,16 @@ const App: React.FC = () => {
       case "catalog":
         return <ProductCatalogPage setRoute={setRoute} addToCart={addToCart} />;
       case "productDetail":
-        const product = products.find((p) => p.id === route.id);
-        return product ? (
+        // A rota agora contém o objeto 'product' diretamente.
+        // Não precisamos mais do .find()
+        return (
           <ProductDetailPage
-            product={product}
+            product={route.product} // <-- Usamos o produto que veio da rota
             setRoute={setRoute}
             addToCart={addToCart}
           />
-        ) : (
-          <p>Produto não encontrado</p>
         );
+        <p>Produto não encontrado</p>;
       case "cart":
         return (
           <CartPage

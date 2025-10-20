@@ -102,26 +102,8 @@ const CheckoutPaymentPage: React.FC<CheckoutPaymentPageProps> = ({
           disabled={loading}
           className="relative z-50" // <-- ADICIONE ESTAS CLASSES
         >
-          {loading ? "Finalizando..." : "FINALIZAR PEDIDO (Componente)"}
+          {loading ? "Finalizando..." : "FINALIZAR PEDIDO"}
         </PrimaryButton>
-
-        {/* ================================================================== */}
-        {/* O NOSSO BOTÃO DE TESTE */}
-        {/* ================================================================== */}
-        <button
-          onClick={handleFinishOrder}
-          disabled={loading}
-          style={{
-            backgroundColor: "green",
-            color: "white",
-            padding: "0.75rem",
-            borderRadius: "8px",
-            width: "100%",
-            fontWeight: "bold",
-          }}
-        >
-          {loading ? "Processando..." : "BOTÃO DE TESTE (HTML Puro)"}
-        </button>
       </div>
     </div>
   );

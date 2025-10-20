@@ -74,7 +74,7 @@ const OrderHistoryPage: React.FC<OrderHistoryPageProps> = ({
                     /* ==================================================== */}
                                                    {" "}
                     <p className="font-bold text-body-text">
-                      it                                 R${" "}
+                                                      R${" "}
                       {order.valorTotal.toFixed(2).replace(".", ",")}           
                                          {" "}
                     </p>
