@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal; // Importe a anotação
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.security.core.Authentication;
+import br.com.cupcakeapp.backend.repository.ClienteRepository;
+
 
 import java.net.URI;
 import java.util.List;
@@ -26,6 +29,10 @@ public class ContaController {
 
     private final PedidoService pedidoService;
     private final ClienteService clienteService;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+    
 
     @Autowired
     public ContaController(PedidoService pedidoService, ClienteService clienteService) {
@@ -90,6 +97,27 @@ public class ContaController {
     public ResponseEntity<List<Endereco>> listarEnderecos(@AuthenticationPrincipal Cliente clienteLogado) {
         List<Endereco> enderecos = clienteService.buscarEnderecosPorCliente(clienteLogado.getId());
         return ResponseEntity.ok(enderecos);
+    }
+    
+    @PutMapping("/enderecos/{id}")
+    public ResponseEntity<Endereco> atualizarEndereco(
+            @PathVariable Integer id, 
+            @RequestBody EnderecoDTO enderecoDTO, 
+            Authentication authentication) {
+
+        // 1. Pega o email do token
+        String email = authentication.getName(); 
+        
+        // 2. Busca o Cliente (você já tem 'clienteRepository' injetado)
+        Cliente clienteLogado = clienteRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Cliente não encontrado via token"));
+        
+        Integer clienteId = clienteLogado.getId();
+
+        // 3. Chama o Service (você já tem 'clienteService' injetado)
+        Endereco enderecoAtualizado = clienteService.atualizarEndereco(clienteId, id, enderecoDTO);
+
+        return ResponseEntity.ok(enderecoAtualizado);
     }
 
     /**

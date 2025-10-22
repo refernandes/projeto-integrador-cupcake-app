@@ -317,6 +317,57 @@ const App: React.FC = () => {
     }
   }, [cart, deliveryAddress, token]); // Dependências do useCallback, [cart, currentUser, deliveryAddress, token]);
 
+  // ADICIONE ESTA NOVA FUNÇÃO (depois de 'placeOrder', ~linha 285)
+
+  const handleUpdateAddress = async (
+    addressId: number,
+    // Usamos 'any' aqui para ignorar o types.ts (que espera Inglês)
+    // O 'addressData' que chega aqui já está em Português (rua, bairro...)
+    addressData: any
+  ) => {
+    if (!token) {
+      console.error("Usuário não autenticado");
+      return;
+    }
+
+    // NÃO HÁ TRADUÇÃO. Enviamos os dados em Português
+    // que recebemos do formulário.
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/conta/enderecos/${addressId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(addressData), // Envia 'rua', 'bairro', etc.
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Falha ao atualizar endereço");
+      }
+
+      const updatedAddressApi = await response.json(); // API retorna Português
+
+      // Atualiza o estado 'user' com o endereço modificado (em Português)
+      setCurrentUser((prevUser) => {
+        if (!prevUser) return null;
+
+        const updatedAddresses = prevUser.addresses.map((addr: any) =>
+          addr.id === addressId ? updatedAddressApi : addr
+        );
+
+        return { ...prevUser, addresses: updatedAddresses };
+      });
+
+      console.log("Endereço atualizado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao atualizar endereço:", error);
+    }
+  };
+
   // Funções vazias para satisfazer o TypeScript e permitir a renderização do layout
   const createProduct = async (productData: any) => {
     // A FUNÇÃO AGORA TEM LÓGICA
@@ -534,12 +585,16 @@ const App: React.FC = () => {
           />
         );
 
+      // ==================================================================
+      // TRECHO 2 ATUALIZADO: Chamada do CheckoutAddressPage corrigida
+      // ==================================================================
       case "deliveryAddress":
         return (
           <CheckoutAddressPage
             user={currentUser}
             setRoute={setRoute}
             addAddress={addAddress} // <<< AQUI! Passamos a referência da função correta
+            updateAddress={handleUpdateAddress}
             deleteAddress={() => {}} // TODO: Implementar a lógica de deleção
             setDeliveryAddress={setDeliveryAddress}
             selectedAddress={deliveryAddress}
@@ -567,9 +622,11 @@ const App: React.FC = () => {
         return <OrderHistoryPage orders={orders} setRoute={setRoute} />;
 
       case "orderTracking":
+        // Esta rota também estava faltando
         return <OrderTrackingPage orderId={route.orderId} orders={orders} />;
 
       case "account":
+        // Esta era a principal rota faltando
         return (
           <AccountPage
             user={currentUser}

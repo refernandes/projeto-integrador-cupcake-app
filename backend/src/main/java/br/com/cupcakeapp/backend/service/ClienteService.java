@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List; // Adicione este import também
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClienteService {
@@ -115,6 +116,33 @@ public class ClienteService {
         // 3. Se tudo estiver ok, deleta o endereço
         enderecoRepository.delete(endereco); // MÉTODO ADICIONADO
     } // MÉTODO ADICIONADO
+
+    @Transactional // Garante que a operação seja atômica
+    public Endereco atualizarEndereco(Integer clienteId, Integer enderecoId, EnderecoDTO enderecoDTO) {
+        // 1. Reusa o método 'buscarPerfil' para validar o cliente
+        Cliente cliente = buscarPerfil(clienteId); 
+
+        // 2. Busca o endereço que queremos atualizar
+        // (O ClienteService já tem a dependência 'enderecoRepository')
+        Endereco enderecoExistente = enderecoRepository.findById(enderecoId)
+                .orElseThrow(() -> new RuntimeException("Endereço não encontrado com o ID: " + enderecoId));
+
+        // 3. REGRA DE SEGURANÇA: Garante que o endereço pertence ao cliente logado
+        if (!enderecoExistente.getCliente().getId().equals(cliente.getId())) {
+            throw new SecurityException("Acesso negado: Este endereço não pertence ao usuário.");
+        }
+
+        // 4. Atualiza os campos do endereço com os dados do DTO
+        enderecoExistente.setRua(enderecoDTO.getRua());
+        enderecoExistente.setNumero(enderecoDTO.getNumero());
+        enderecoExistente.setComplemento(enderecoDTO.getComplemento());
+        enderecoExistente.setBairro(enderecoDTO.getBairro());
+        enderecoExistente.setCidade(enderecoDTO.getCidade());
+        enderecoExistente.setCep(enderecoDTO.getCep());
+
+        // 5. Salva as alterações no banco de dados
+        return enderecoRepository.save(enderecoExistente);
+    }
 
  // Fim da classe ClienteService
 }

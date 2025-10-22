@@ -116,10 +116,23 @@ public Pedido buscarPorIdECliente(Integer pedidoId, Integer clienteId) {
         throw new RuntimeException("Acesso negado. Este pedido não pertence ao cliente informado.");
     }
 
+    
+
     return pedido;
 
     
 }
+
+public List<PedidoResponseDTO> buscarPorClienteDTO(Integer clienteId) {
+        // 1. Reusa seu método existente que busca a entidade
+        List<Pedido> pedidos = buscarPorCliente(clienteId); //
+
+        // 2. Converte a lista de Entidades para uma lista de DTOs
+        return pedidos.stream()
+                .map(PedidoResponseDTO::new) // Usa o mesmo construtor do 'listarTodosAdmin'
+                .collect(Collectors.toList());
+    }
+
 @Transactional // Garante que a operação seja atômica
 public Pedido alterarStatus(Integer id, String novoStatus) {
     Pedido pedido = pedidoRepository.findById(id)
