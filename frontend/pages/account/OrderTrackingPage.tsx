@@ -106,14 +106,14 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({
                                          {" "}
               <img
                 src={item.produto.imagemUrl}
-                alt={item.nomeProduto}
+                alt={item.produto.nome}
                 className="w-16 h-16 rounded-md object-cover"
               />
                                          {" "}
               <div className="flex-grow ml-4">
                                                {" "}
-                <p className="font-semibold">{item.nomeProduto}</p>             
-                                 {" "}
+                <p className="font-semibold">{item.produto.nome}</p>           
+                                   {" "}
                 <p className="text-sm text-gray-500">Qtd: {item.quantidade}</p> 
                                          {" "}
               </div>

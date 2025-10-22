@@ -10,6 +10,17 @@ const OrderHistoryPage: React.FC<OrderHistoryPageProps> = ({
   orders,
   setRoute,
 }) => {
+  // ==========================================================
+  // >>> COLOQUE A VARIÁVEL AQUI <<<
+  // ==========================================================
+  const statusColors: Record<string, string> = {
+    "Pedido Confirmado": "bg-blue-100 text-blue-700",
+    "Em Preparo": "bg-yellow-100 text-yellow-700",
+    "A Caminho": "bg-indigo-100 text-indigo-700",
+    Entregue: "bg-green-100 text-green-700",
+    default: "bg-gray-100 text-gray-700",
+  };
+  // ==========================================================
   // ==================================================================
   // CORREÇÃO 1: Adicionamos uma verificação de segurança
   // para o caso do array de pedidos estar vazio.
@@ -83,7 +94,12 @@ const OrderHistoryPage: React.FC<OrderHistoryPageProps> = ({
                     /* CORREÇÃO 5: Usamos 'statusPedido' */
                     /* ==================================================== */}
                                                    {" "}
-                    <span className="text-xs font-semibold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                    <span
+                      className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                        statusColors[order.statusPedido] ||
+                        statusColors["default"]
+                      }`}
+                    >
                                                         {order.statusPedido}   
                                                  {" "}
                     </span>
