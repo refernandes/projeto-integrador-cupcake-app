@@ -2,7 +2,6 @@
 package br.com.cupcakeapp.backend.controller;
 
 import br.com.cupcakeapp.backend.dto.PedidoResponseDTO; // Crie ou ajuste este import
-import br.com.cupcakeapp.backend.dto.StatusUpdateRequestDTO;
 import br.com.cupcakeapp.backend.model.Pedido;
 import br.com.cupcakeapp.backend.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
