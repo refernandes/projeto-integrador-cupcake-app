@@ -8,6 +8,8 @@ import br.com.cupcakeapp.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import br.com.cupcakeapp.backend.dto.PedidoResponseDTO;
+import java.util.stream.Collectors;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -87,6 +89,16 @@ public class PedidoService {
     }
 
     /**
+     * Retorna TODOS os pedidos para o painel de administração.
+     */
+    public List<PedidoResponseDTO> listarTodosAdmin() {
+        return pedidoRepository.findAll()
+                .stream()
+                .map(PedidoResponseDTO::new) // Converte cada Pedido para um DTO
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Busca o histórico de pedidos de um cliente.
      */
     public List<Pedido> buscarPorCliente(Integer clienteId) {
@@ -105,5 +117,14 @@ public Pedido buscarPorIdECliente(Integer pedidoId, Integer clienteId) {
     }
 
     return pedido;
+
+    
+}
+@Transactional // Garante que a operação seja atômica
+public Pedido alterarStatus(Integer id, String novoStatus) {
+    Pedido pedido = pedidoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pedido não encontrado com o ID: " + id));
+    pedido.setStatusPedido(novoStatus);
+    return pedidoRepository.save(pedido);
 }
 }

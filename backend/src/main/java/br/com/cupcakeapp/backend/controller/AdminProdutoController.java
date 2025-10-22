@@ -32,9 +32,9 @@ public class AdminProdutoController {
      */
     @GetMapping
     public ResponseEntity<List<ProdutoResponseDTO>> listarTodosOsProdutos() {
-        // Para o admin, precisamos de um método no service que liste todos, não apenas os ativos.
-        // Vamos criar isso no futuro. Por enquanto, retornamos uma lista vazia como placeholder.
-        return ResponseEntity.ok(List.of()); // Placeholder
+        // Agora chamamos o método correto que retorna a lista completa para o admin
+        List<ProdutoResponseDTO> todosOsProdutos = produtoService.listarTodosAdmin();
+        return ResponseEntity.ok(todosOsProdutos); // <-- CORREÇÃO APLICADA
     }
 
 
@@ -65,12 +65,7 @@ public class AdminProdutoController {
      * Endpoint para ativar ou desativar um produto (HU #17).
      * URL: PATCH /api/admin/produtos/{id}/status?ativo=false
      */
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> alterarStatusProduto(@PathVariable Integer id, @RequestParam boolean ativo) {
-        produtoService.alterarStatus(id, ativo);
-        return ResponseEntity.noContent().build();
-    }
-
+    
     /**
      * Endpoint para deletar um produto.
      * URL: DELETE /api/admin/produtos/{id}

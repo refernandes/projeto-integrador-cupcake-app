@@ -85,6 +85,7 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
     () =>
       allProducts.filter(
         (p) =>
+          p.stock > 0 &&
           (filter === "Todos" || p.category === filter) &&
           p.name.toLowerCase().includes(searchTerm.toLowerCase())
       ),

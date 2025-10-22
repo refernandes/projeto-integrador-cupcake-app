@@ -97,4 +97,24 @@ public class ClienteService {
 
         return enderecoRepository.save(novoEndereco);
     }
+    /** // MÉTODO ADICIONADO
+     * Deleta um endereço específico de um cliente.             // MÉTODO ADICIONADO
+     * Garante que o endereço pertence ao cliente antes de deletar. // MÉTODO ADICIONADO
+     */                                                        // MÉTODO ADICIONADO
+    public void deletarEndereco(Integer clienteId, Integer enderecoId) { // MÉTODO ADICIONADO
+        // 1. Busca o endereço pelo ID
+        Endereco endereco = enderecoRepository.findById(enderecoId) // MÉTODO ADICIONADO
+                .orElseThrow(() -> new RuntimeException("Endereço não encontrado com o ID: " + enderecoId)); // MÉTODO ADICIONADO
+
+        // 2. VERIFICA SE O ENDEREÇO PERTENCE AO CLIENTE LOGADO (Medida de Segurança)
+        if (!endereco.getCliente().getId().equals(clienteId)) { // MÉTODO ADICIONADO
+            // Lança uma exceção de segurança se o ID do cliente do endereço não bater com o ID do cliente logado
+            throw new SecurityException("Acesso negado: Este endereço não pertence ao usuário."); // MÉTODO ADICIONADO
+        } // MÉTODO ADICIONADO
+
+        // 3. Se tudo estiver ok, deleta o endereço
+        enderecoRepository.delete(endereco); // MÉTODO ADICIONADO
+    } // MÉTODO ADICIONADO
+
+ // Fim da classe ClienteService
 }

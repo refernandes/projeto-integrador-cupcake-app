@@ -1,15 +1,14 @@
-// Local: /frontend/src/pages/checkout/CheckoutAddressPage.tsx
-
 import React, { useState } from "react";
 import type { Route, User, Address } from "../../types";
 import InputField from "../../components/ui/InputField";
 import PrimaryButton from "../../components/ui/PrimaryButton";
+import { PencilIcon } from "../../components/Icons"; // Importa ícone se necessário
 
 interface CheckoutAddressPageProps {
   user: User;
   setRoute: (route: Route) => void;
-  // 1. ATUALIZAÇÃO DA PROP: A função 'addAddress' agora é uma Promise.
-  addAddress: (newAddress: Omit<Address, "id">) => Promise<void>;
+  addAddress: (newAddress: Omit<Address, "id">) => void;
+  updateAddress: (id: number, data: Omit<Address, "id">) => void;
   deleteAddress: (id: number) => void;
   setDeliveryAddress: (address: Address) => void;
   selectedAddress: Address | null;
@@ -19,61 +18,50 @@ const CheckoutAddressPage: React.FC<CheckoutAddressPageProps> = ({
   user,
   setRoute,
   addAddress,
+  updateAddress,
   deleteAddress,
+  addressToEdit,
   setDeliveryAddress,
   selectedAddress,
 }) => {
+  const isEditing = !!addressToEdit;
+  const [formData, setFormData] = useState({
+    cep: "",
+    rua: "",
+    numero: "",
+    complemento: "",
+    bairro: "",
+    cidade: "",
+  });
   const [isAdding, setIsAdding] = useState(false);
-
-  // 2. ATUALIZAÇÃO DOS ESTADOS: Renomeados para corresponder à API Java (rua, bairro, etc.)
   const [cep, setCep] = useState("");
-  const [rua, setRua] = useState("");
-  const [numero, setNumero] = useState("");
-  const [complemento, setComplemento] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [cidade, setCidade] = useState("");
+  const [street, setStreet] = useState("");
+  const [number, setNumber] = useState("");
+  const [complement, setComplement] = useState("");
+  const [neighborhood, setNeighborhood] = useState("");
+  const [city, setCity] = useState("");
 
-  // Novos estados para feedback de UI
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // 3. ATUALIZAÇÃO DA LÓGICA: A função agora é assíncrona e envia os dados corretos.
-  const handleAddNewAddress = async (e: React.FormEvent) => {
+  const handleAddNewAddress = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    // Monta o objeto com os nomes de campo que a API Java espera
-    const newAddressData = { cep, rua, numero, complemento, bairro, cidade };
-
-    try {
-      // Chama a função assíncrona do App.tsx e espera a conclusão
-      await addAddress(newAddressData);
-
-      setIsAdding(false);
-      // Limpa o formulário apenas em caso de sucesso
-      setCep("");
-      setRua("");
-      setNumero("");
-      setComplemento("");
-      setBairro("");
-      setCidade("");
-    } catch (err: any) {
-      setError(err.message || "Ocorreu um erro ao salvar o endereço.");
-    } finally {
-      setLoading(false);
-    }
+    const newAddress: Omit<Address, "id"> = {
+      cep,
+      street,
+      number,
+      complement,
+      neighborhood,
+      city,
+    };
+    addAddress(newAddress);
+    setIsAdding(false);
+    // Clear form
+    setCep("");
+    setStreet("");
+    setNumber("");
+    setComplement("");
+    setNeighborhood("");
+    setCity("");
   };
 
-  const handleContinueToPayment = () => {
-    if (!selectedAddress) {
-      alert("Por favor, selecione ou cadastre um endereço de entrega.");
-      return;
-    }
-    setRoute({ name: "payment" });
-  };
-
-  // 4. ATUALIZAÇÃO DO JSX: Conectado aos novos estados e lógica.
   return (
     <div className="p-4 space-y-4 pb-24">
       <h2 className="text-2xl font-bold text-title">Endereço de Entrega</h2>
@@ -106,7 +94,6 @@ const CheckoutAddressPage: React.FC<CheckoutAddressPageProps> = ({
                   </div>
                 </div>
                 <div>
-                  {/* Exibe os campos corretos (rua, bairro, etc.) */}
                   <p className="font-bold">
                     {address.rua}, {address.numero}
                   </p>
@@ -143,50 +130,40 @@ const CheckoutAddressPage: React.FC<CheckoutAddressPageProps> = ({
             label="CEP"
             value={cep}
             onChange={(e) => setCep(e.target.value)}
-            required
           />
           <InputField
-            id="rua"
+            id="street"
             label="Rua"
-            value={rua}
-            onChange={(e) => setRua(e.target.value)}
-            required
+            value={street}
+            onChange={(e) => setStreet(e.target.value)}
           />
           <div className="grid grid-cols-2 gap-4">
             <InputField
-              id="numero"
+              id="number"
               label="Número"
-              value={numero}
-              onChange={(e) => setNumero(e.target.value)}
-              required
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
             />
             <InputField
-              id="complemento"
+              id="complement"
               label="Complemento"
-              value={complemento}
-              onChange={(e) => setComplemento(e.target.value)}
+              value={complement}
+              onChange={(e) => setComplement(e.target.value)}
             />
           </div>
           <InputField
-            id="bairro"
+            id="neighborhood"
             label="Bairro"
-            value={bairro}
-            onChange={(e) => setBairro(e.target.value)}
-            required
+            value={neighborhood}
+            onChange={(e) => setNeighborhood(e.target.value)}
           />
           <InputField
-            id="cidade"
+            id="city"
             label="Cidade"
-            value={cidade}
-            onChange={(e) => setCidade(e.target.value)}
-            required
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
           />
-
-          {error && <p className="text-sm text-center text-red-500">{error}</p>}
-
-          <PrimaryButton type="submit" disabled={loading}>
-            {loading ? "Salvando..." : "SALVAR E USAR ENDEREÇO"}
-          </PrimaryButton>
+          <PrimaryButton type="submit">SALVAR E USAR ENDEREÇO</PrimaryButton>
           <button
             type="button"
             onClick={() => setIsAdding(false)}
@@ -206,7 +183,7 @@ const CheckoutAddressPage: React.FC<CheckoutAddressPageProps> = ({
 
       <div className="fixed bottom-16 left-0 right-0 bg-white border-t p-4 max-w-md mx-auto">
         <PrimaryButton
-          onClick={handleContinueToPayment}
+          onClick={() => setRoute({ name: "payment" })}
           disabled={!selectedAddress}
         >
           IR PARA PAGAMENTO

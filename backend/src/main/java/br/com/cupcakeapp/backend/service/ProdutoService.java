@@ -6,6 +6,8 @@ import br.com.cupcakeapp.backend.model.Produto;
 import br.com.cupcakeapp.backend.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import br.com.cupcakeapp.backend.dto.ProdutoResponseDTO; // Adicione este import
+import java.util.stream.Collectors; // Adicione este import
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class ProdutoService {
     public ProdutoService(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
+
+    
 
     /**
      * Lista todos os produtos ativos. Se um termo de busca for fornecido,
@@ -56,12 +60,13 @@ public class ProdutoService {
         
         return produtoRepository.save(produtoExistente);
     }
-    
-    public void alterarStatus(Integer id, boolean ativo) {
-        Produto produto = buscarPorId(id);
-        produto.setAtivo(ativo);
-        produtoRepository.save(produto);
+    public List<ProdutoResponseDTO> listarTodosAdmin() {
+        return produtoRepository.findAll() // 1. Busca todos os produtos do banco
+                .stream()                  // 2. Cria um fluxo para processamento
+                .map(ProdutoResponseDTO::new) // 3. Para cada produto, cria um DTO
+                .collect(Collectors.toList()); // 4. Coleta os resultados em uma lista
     }
+    
 
     /**
  * Cria um novo produto a partir de um DTO.

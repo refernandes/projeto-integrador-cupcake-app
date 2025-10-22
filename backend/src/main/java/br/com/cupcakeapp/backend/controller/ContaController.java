@@ -103,4 +103,22 @@ public class ContaController {
         Endereco novoEndereco = clienteService.adicionarEndereco(clienteLogado.getId(), enderecoDTO);
         return ResponseEntity.status(201).body(novoEndereco);
     }
-}
+    // ... (seu método @PostMapping("/enderecos") existente) ...
+
+    /**
+     * Endpoint para excluir um endereço do cliente logado. // MÉTODO ADICIONADO
+     * URL: DELETE /api/conta/enderecos/{id}                 // MÉTODO ADICIONADO
+     */                                                     // MÉTODO ADICIONADO
+    @DeleteMapping("/enderecos/{id}")                       // MÉTODO ADICIONADO
+    public ResponseEntity<Void> deletarEndereco(            // MÉTODO ADICIONADO
+            @AuthenticationPrincipal Cliente clienteLogado, // MÉTODO ADICIONADO
+            @PathVariable Integer id) {                     // MÉTODO ADICIONADO
+        
+        // Chama o serviço para realizar a exclusão, garantindo que o endereço pertence ao cliente logado
+        clienteService.deletarEndereco(clienteLogado.getId(), id); // MÉTODO ADICIONADO
+        
+        // Retorna HTTP 204 No Content, indicando sucesso sem corpo de resposta
+        return ResponseEntity.noContent().build();             // MÉTODO ADICIONADO
+    }                                                          // MÉTODO ADICIONADO
+
+} // Fim da classe ContaController

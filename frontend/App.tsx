@@ -27,6 +27,13 @@ import OrderTrackingPage from "./pages/account/OrderTrackingPage";
 import AccountPage from "./pages/account/AccountPage";
 import EditProfilePage from "./pages/account/EditProfilePage";
 import OrderHistoryPage from "./pages/account/OrderHistoryPage";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import AdminProductsPage from "./pages/admin/AdminProductsPage";
+import AdminProductFormPage from "./pages/admin/AdminProductFormPage";
+import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
+import AdminOrderDetailPage from "./pages/admin/AdminOrderDetailPage";
+import { AdminLayout } from "./components/layout/AdminLayout";
 
 const API_BASE_URL = "http://localhost:8080";
 
@@ -36,7 +43,9 @@ const App: React.FC = () => {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("authToken")
   );
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(
+    () => localStorage.getItem("isAdmin") === "true"
+  );
   const [cart, setCart] = useState<CartItem[]>([]);
   const [products, setProducts] = useState<Cupcake[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -44,63 +53,97 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      const fetchUserData = async () => {
-        try {
-          const [
-            profileResponse,
-            addressResponse,
-            ordersResponse,
-            productsResponse,
-          ] = await Promise.all([
-            fetch(`${API_BASE_URL}/api/conta/perfil`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
-            fetch(`${API_BASE_URL}/api/conta/enderecos`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
-            fetch(`${API_BASE_URL}/api/conta/pedidos`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
-            fetch(`${API_BASE_URL}/api/produtos`),
-          ]);
+      if (!isAdmin) {
+        const fetchUserData = async () => {
+          try {
+            const [
+              profileResponse,
+              addressResponse,
+              ordersResponse,
+              productsResponse,
+            ] = await Promise.all([
+              fetch(`${API_BASE_URL}/api/conta/perfil`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+              fetch(`${API_BASE_URL}/api/conta/enderecos`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+              fetch(`${API_BASE_URL}/api/conta/pedidos`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+              fetch(`${API_BASE_URL}/api/produtos`),
+            ]);
 
-          if (
-            !profileResponse.ok ||
-            !addressResponse.ok ||
-            !ordersResponse.ok ||
-            !productsResponse.ok
-          ) {
-            throw new Error("Sessão inválida ou expirada.");
+            if (
+              !profileResponse.ok ||
+              !addressResponse.ok ||
+              !ordersResponse.ok ||
+              !productsResponse.ok
+            ) {
+              throw new Error("Sessão inválida ou expirada.");
+            }
+
+            const userData = await profileResponse.json();
+            const addressData = await addressResponse.json();
+            const ordersData = await ordersResponse.json();
+            const productsData = await productsResponse.json();
+
+            setCurrentUser({
+              id: userData.id,
+              name: userData.nome,
+              email: userData.email,
+              phone: userData.telefone,
+              addresses: addressData,
+            });
+
+            if (addressData.length > 0) {
+              setDeliveryAddress(addressData[0]);
+            }
+            setOrders(ordersData);
+            setProducts(productsData);
+          } catch (error) {
+            console.error("Falha ao carregar dados do usuário:", error);
+            onLogout();
           }
+        };
+        fetchUserData();
+      } else {
+        // Bloco adicionado para carregar dados do admin
+        const fetchAdminData = async () => {
+          try {
+            const [productsResponse, ordersResponse] = await Promise.all([
+              fetch(`${API_BASE_URL}/api/admin/produtos`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+              // TODO: Certifique-se de que o endpoint /api/admin/pedidos existe
+              fetch(`${API_BASE_URL}/api/admin/pedidos`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }),
+            ]);
 
-          const userData = await profileResponse.json();
-          const addressData = await addressResponse.json();
-          const ordersData = await ordersResponse.json();
-          const productsData = await productsResponse.json();
+            if (!productsResponse.ok || !ordersResponse.ok) {
+              throw new Error("Falha ao carregar dados de administrador.");
+            }
 
-          setCurrentUser({
-            id: userData.id,
-            name: userData.nome,
-            email: userData.email,
-            phone: userData.telefone,
-            addresses: addressData,
-          });
+            const productsData = await productsResponse.json();
+            const ordersData = await ordersResponse.json();
 
-          if (addressData.length > 0) {
-            setDeliveryAddress(addressData[0]);
+            setProducts(productsData);
+            setOrders(ordersData);
+          } catch (error) {
+            console.error(error);
+            alert(
+              "Erro ao carregar dados do painel. Verifique o console. Fazendo logout."
+            );
+            onLogout();
           }
-          setOrders(ordersData);
-          setProducts(productsData);
-        } catch (error) {
-          console.error("Falha ao carregar dados do usuário:", error);
-          onLogout();
-        }
-      };
-      fetchUserData();
+        };
+        fetchAdminData();
+      }
     } else {
       setRoute({ name: "login" });
     }
-  }, [token]);
+  }, [token, isAdmin]);
 
   const handleLoginSuccess = (newToken: string) => {
     localStorage.setItem("authToken", newToken);
@@ -109,12 +152,36 @@ const App: React.FC = () => {
 
   const onLogout = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem("isAdmin");
     setToken(null);
     setCurrentUser(null);
     setIsAdmin(false);
     setCart([]);
     setOrders([]);
     setRoute({ name: "login" });
+  };
+
+  const handleAdminLogin = async (loginData: any) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Credenciais de administrador inválidas.");
+      }
+
+      const { token: newToken } = await response.json();
+      localStorage.setItem("authToken", newToken);
+      localStorage.setItem("isAdmin", "true"); // Guarda que é um admin
+      setToken(newToken);
+      setIsAdmin(true);
+      setRoute({ name: "adminDashboard" });
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
 
   // Funções do carrinho...
@@ -250,9 +317,181 @@ const App: React.FC = () => {
     }
   }, [cart, deliveryAddress, token]); // Dependências do useCallback, [cart, currentUser, deliveryAddress, token]);
 
+  // Funções vazias para satisfazer o TypeScript e permitir a renderização do layout
+  const createProduct = async (productData: any) => {
+    // A FUNÇÃO AGORA TEM LÓGICA
+    if (!token) return;
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/admin/produtos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(productData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Falha ao criar o produto.");
+      }
+
+      const newProduct = await response.json();
+      // Adiciona o novo produto no estado global
+      setProducts((prev) => [newProduct, ...prev]);
+      alert("Produto criado com sucesso!");
+      setRoute({ name: "adminManageProducts" }); // Redireciona para a lista
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao criar produto.");
+    }
+  }; // LINHA ADICIONADA
+  const updateProduct = async (productId: number, productData: any) => {
+    // A FUNÇÃO AGORA TEM LÓGICA
+    if (!token) return;
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/produtos/${productId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(productData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Falha ao atualizar o produto.");
+      }
+
+      const updatedProduct = await response.json();
+      // Atualiza o produto no estado global
+      setProducts((prev) =>
+        prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+      );
+      alert("Produto atualizado com sucesso!");
+      setRoute({ name: "adminManageProducts" }); // Redireciona para a lista
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao atualizar produto.");
+    }
+  };
+  const updateOrderStatus = async (orderId: string, newStatus: OrderStatus) => {
+    // A FUNÇÃO AGORA TEM LÓGICA
+    if (!token) return; // Verificação de segurança
+    try {
+      // 1. Faz a chamada à API para o endpoint que acabamos de criar
+      const url = `${API_BASE_URL}/api/admin/pedidos/${orderId}/status?novoStatus=${newStatus}`; // LINHA CORRIGIDA
+
+      const response = await fetch(url, {
+        method: "PATCH", // O método continua sendo PATCH
+        headers: {
+          // NÃO precisamos mais de 'Content-Type', pois não há corpo na requisição
+          Authorization: `Bearer ${token}`,
+        },
+        // NÃO há mais a propriedade 'body'
+      });
+
+      if (!response.ok) {
+        throw new Error("Falha ao atualizar o status do pedido.");
+      }
+
+      // 2. Recebe o pedido atualizado de volta da API
+      const updatedOrder = await response.json();
+
+      // 3. ATUALIZA O ESTADO GLOBAL: Esta é a linha que faz a mágica acontecer
+      // Ela substitui o pedido antigo pelo novo no array 'orders'
+      setOrders((prevOrders) =>
+        prevOrders.map((o) =>
+          String(o.id) === String(updatedOrder.id) ? updatedOrder : o
+        )
+      );
+    } catch (error) {
+      console.error(error);
+      // O alert da página de detalhes já informa o sucesso, então só alertamos em caso de erro.
+      alert("Erro ao atualizar o status do pedido.");
+    }
+  }; // LINHA ADICIONADA
+
+  // ADICIONE ESTA IMPLEMENTAÇÃO COMPLETA E REVISADA
+
   const renderPage = () => {
-    if (token && !currentUser) {
+    if (token && !currentUser && !isAdmin) {
       return <div className="text-center p-10">Carregando...</div>;
+    }
+    if (route.name === "adminLogin") {
+      return (
+        <AdminLoginPage
+          setRoute={setRoute}
+          handleAdminLogin={handleAdminLogin}
+        />
+      );
+    }
+
+    // ADICIONE TODO ESTE BLOCO NO LUGAR DO ANTERIOR
+    if (token && isAdmin) {
+      // O layout agora "envelopa" toda a lógica de renderização do admin // LINHA ADICIONADA
+      return (
+        // LINHA ADICIONADA
+        <AdminLayout
+          setRoute={setRoute}
+          activeRoute={route.name}
+          onLogout={onLogout}
+        >
+          {" "}
+          {(() => {
+            // LINHA ADICIONADA (Permite usar 'switch' dentro do JSX)
+            switch (
+              route.name // O 'switch' case original agora vive aqui dentro
+            ) {
+              case "adminManageProducts":
+                return (
+                  <AdminProductsPage products={products} setRoute={setRoute} />
+                );
+              case "adminProductForm":
+                const productToEdit = products.find(
+                  (p) => String(p.id) === String(route.id)
+                );
+                return (
+                  <AdminProductFormPage
+                    setRoute={setRoute}
+                    product={productToEdit}
+                    createProduct={createProduct}
+                    updateProduct={updateProduct}
+                  />
+                );
+              case "adminManageOrders":
+                return <AdminOrdersPage orders={orders} setRoute={setRoute} />;
+              // ADICIONE ESTE NOVO case COM O DIAGNÓSTICO
+              case "adminOrderDetail":
+                // As 3 linhas a seguir são para diagnóstico e podem ser removidas depois // LINHA ADICIONADA
+                console.log("Procurando pelo orderId:", route.orderId); // LINHA ADICIONADA
+                console.log("Tipo do orderId:", typeof route.orderId); // LINHA ADICIONADA
+                console.log("Array de Pedidos 'orders':", orders); // LINHA ADICIONADA
+
+                const orderToView = orders.find(
+                  (o) => String(o.id) === String(route.orderId) // Garantimos que ambos os lados são strings
+                );
+                return orderToView ? (
+                  <AdminOrderDetailPage
+                    order={orderToView}
+                    setRoute={setRoute}
+                    updateOrderStatus={updateOrderStatus}
+                  />
+                ) : (
+                  <p>Pedido não encontrado</p>
+                );
+              case "adminDashboard":
+              default:
+                // A página filha não precisa mais das props de navegação ou logout
+                return (
+                  <AdminDashboardPage orders={orders} products={products} />
+                );
+            }
+          })()}
+        </AdminLayout>
+      );
     }
 
     if (!currentUser) {
@@ -295,9 +534,6 @@ const App: React.FC = () => {
           />
         );
 
-      // ==================================================================
-      // TRECHO 2 ATUALIZADO: Chamada do CheckoutAddressPage corrigida
-      // ==================================================================
       case "deliveryAddress":
         return (
           <CheckoutAddressPage
@@ -331,11 +567,9 @@ const App: React.FC = () => {
         return <OrderHistoryPage orders={orders} setRoute={setRoute} />;
 
       case "orderTracking":
-        // Esta rota também estava faltando
         return <OrderTrackingPage orderId={route.orderId} orders={orders} />;
 
       case "account":
-        // Esta era a principal rota faltando
         return (
           <AccountPage
             user={currentUser}
@@ -346,18 +580,15 @@ const App: React.FC = () => {
         );
 
       case "editProfile":
-        // Esta rota também estava faltando
         return (
           <EditProfilePage
             user={currentUser}
             setRoute={setRoute}
-            // Precisamos adicionar a função de 'atualizar perfil' aqui depois
+            updateUser={() => {}}
           />
         );
-      // ... outras rotas ...
 
       default:
-        // O 'default' continua sendo o catálogo
         return <ProductCatalogPage setRoute={setRoute} addToCart={addToCart} />;
     }
   };
@@ -371,18 +602,22 @@ const App: React.FC = () => {
 
   return (
     <div className="bg-background min-h-screen font-sans text-body-text">
-      <div className="max-w-md mx-auto bg-background shadow-2xl h-screen flex flex-col overflow-hidden">
-        {showClientHeader && (
+      <div className="max-w-md mx-auto bg-background shadow-2xl min-h-screen flex flex-col">
+        {/* ADICIONE '!isAdmin' AQUI: */}
+        {showClientHeader && !isAdmin && (
           <MainHeader setRoute={setRoute} cartCount={cartCount} />
         )}
+
         <main
           className={`flex-grow overflow-y-auto no-scrollbar ${
-            showBottomNav ? "pb-16" : ""
+            showBottomNav && !isAdmin ? "pb-16" : ""
           }`}
         >
           {renderPage()}
         </main>
-        {showBottomNav && (
+
+        {/* E AQUI: */}
+        {showBottomNav && !isAdmin && (
           <BottomNavBar
             setRoute={setRoute}
             activeRoute={route.name}
