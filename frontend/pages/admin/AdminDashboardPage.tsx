@@ -33,7 +33,7 @@ const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
   const pedidosFinalizados = orders.filter(
     (o) => o.statusPedido === "Entregue"
   ).length;
-  const produtosAtivos = products.filter((p) => p.active).length;
+  const produtosAtivos = products.filter((p: any) => p.ativo).length; // Use 'p.ativo'
 
   return (
     // O container principal foi simplificado
