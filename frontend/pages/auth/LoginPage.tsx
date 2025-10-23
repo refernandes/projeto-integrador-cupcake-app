@@ -6,6 +6,7 @@ import { EyeIcon, EyeOffIcon } from "../../components/Icons";
 import Logo from "../../components/ui/Logo";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import InputField from "../../components/ui/InputField";
+import { API_BASE_URL } from "../../src/apiConfig"; // (ou '../apiConfig' dependendo da pasta)
 
 // 1. ATUALIZAÇÃO DAS PROPS:
 // A prop 'onLogin' foi renomeada para 'onLoginSuccess' para ser mais clara.
@@ -33,7 +34,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setRoute, onLoginSuccess }) => {
 
     try {
       // 4. CHAMADA PARA A API BACK-END:
-      const response = await fetch("http://localhost:8080/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import type { Cupcake, Route } from "../../types"; // Mantemos seus tipos
 import { SearchIcon } from "../../components/Icons";
+import { API_BASE_URL } from "../../src/apiConfig";
 
 // Interface para os dados que vêm DIRETAMENTE da sua API Java (ProdutoResponseDTO)
 interface ProdutoAPI {
@@ -40,7 +41,7 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
     const fetchProducts = async () => {
       try {
         // Faz a chamada para o seu backend Java
-        const response = await fetch("http://localhost:8080/api/produtos");
+        const response = await fetch(`${API_BASE_URL}/api/produtos`);
 
         if (!response.ok) {
           throw new Error("Falha na comunicação com o servidor.");

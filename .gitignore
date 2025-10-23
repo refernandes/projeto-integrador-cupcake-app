@@ -1,0 +1,16 @@
+# Arquivos de configuração do Java
+/backend/src/main/resources/application.properties
+
+# Arquivos de IDE
+.idea/
+*.iml
+
+# Arquivos de build
+/backend/target/
+
+# Dependências do Node
+/frontend/node_modules/
+
+
+# Dependências do Node
+.env

@@ -5,6 +5,7 @@ import type { Route } from "../../types";
 import Logo from "../../components/ui/Logo";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import InputField from "../../components/ui/InputField";
+import { API_BASE_URL } from "../../src/apiConfig";
 
 interface RegisterPageProps {
   setRoute: (route: Route) => void;
@@ -35,7 +36,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ setRoute }) => {
 
     try {
       // Chamada para a API de registro do backend
-      const response = await fetch("http://localhost:8080/auth/register", {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
