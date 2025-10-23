@@ -34,8 +34,7 @@ import AdminProductFormPage from "./pages/admin/AdminProductFormPage";
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
 import AdminOrderDetailPage from "./pages/admin/AdminOrderDetailPage";
 import { AdminLayout } from "./components/layout/AdminLayout";
-
-const API_BASE_URL = "http://localhost:8080";
+import { API_BASE_URL } from "./src/apiConfig";
 
 const App: React.FC = () => {
   const [route, setRoute] = useState<Route>({ name: "catalog" });

@@ -49,6 +49,7 @@ public class SecurityConfiguration {
             .cors(Customizer.withDefaults()) // Ativa a configuração global de CORS
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(
                     "/auth/**",
                     "/admin/auth/**",
