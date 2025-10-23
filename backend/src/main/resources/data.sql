@@ -1,3 +1,15 @@
+-- Limpa as tabelas na ordem correta (filhas primeiro)
+DELETE FROM `itens_pedido`;
+DELETE FROM `pedidos`;
+DELETE FROM `enderecos`;
+DELETE FROM `administradores`;
+DELETE FROM `clientes`;
+DELETE FROM `produtos`;
+
+-- Seus INSERTs vêm depois...
+INSERT INTO `administradores` ...
+INSERT INTO `clientes` ...
+-- etc
 -- ----------------------------------------------------------------------------------
 -- data.sql - Script de Carga Inicial para o Spring Boot
 -- ----------------------------------------------------------------------------------
