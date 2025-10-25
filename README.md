@@ -136,18 +136,18 @@ As classes de teste implementadas estão localizadas no diretório `/backend/src
 
 ![Resultado dos Testes Unitários](https://github-production-user-asset-6210df.s3.amazonaws.com/100616022/505629403-ed1ec39f-eddb-4adf-a15e-ab79737e49a1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20251025%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251025T121519Z&X-Amz-Expires=300&X-Amz-Signature=0d7d55e46617bd3742fbb9f020f047f9f40fe3070b6b3d8b757a4bc341254ddb&X-Amz-SignedHeaders=host)
 
-- [cite_start]**Testes de Validação (Frontend/Integração):** Foram realizados na Situação-Problema 3 [cite: 685][cite_start], através de testes manuais por pares (colegas) [cite: 677-681], utilizando a aplicação hospedada. [cite_start]O feedback foi coletado e documentado no Laudo de Qualidade [cite: 683-750].
+- **Testes de Validação (Frontend/Integração):** Foram realizados na Situação-Problema 3, através de testes manuais por pares (colegas), utilizando a aplicação hospedada. O feedback foi coletado e documentado no Laudo de Qualidade.
 
 ## Status do Projeto (SP3 Concluída)
 
-- ✅ **Situação-Problema 1 (Planejamento e BD):** Concluída. [cite_start]Documentação revisada (v2.0) [cite: 669] e banco de dados modelado e documentado.
-- ✅ **Situação-Problema 2 (Codificação e Testes Unitários):** Concluída. [cite_start]Backend e Frontend implementados, integrados e hospedados[cite: 674]. Testes unitários do backend implementados. [cite_start]Vídeo de demonstração inicial gravado[cite: 674].
+- ✅ **Situação-Problema 1 (Planejamento e BD):** Concluída. Documentação revisada (v2.0) e banco de dados modelado e documentado.
+- ✅ **Situação-Problema 2 (Codificação e Testes Unitários):** Concluída. Backend e Frontend implementados, integrados e hospedados. Testes unitários do backend implementados. Vídeo de demonstração inicial gravado.
 - ✅ **Situação-Problema 3 (Validação e Entrega Final):** Concluída.
-  - [cite_start]Feedback de 5 pares coletado e documentado [cite: 677-681].
+  - Feedback de 5 pares coletado e documentado.
   - 5 melhorias de usabilidade implementadas no frontend (Loading, Feedback de Adição, Confirmação de Remoção, Botão Esvaziar Carrinho e Ordenação de Produtos).
-  - [cite_start]Laudo de Qualidade e evidências (prints) finalizados [cite: 683-750].
-  - [cite_start]Vídeo final (SP3) demonstrando as correções gravado[cite: 753].
-  - [cite_start]Documento `PIT_atividade.docx` 100% preenchido e finalizado para entrega [cite: 664-753].
+  - Laudo de Qualidade e evidências (prints) finalizados.
+  - Vídeo final (SP3) demonstrando as correções gravado.
+  - Documento `PIT_atividade.docx` 100% preenchido e finalizado para entrega.
 
 ## Autor
 
