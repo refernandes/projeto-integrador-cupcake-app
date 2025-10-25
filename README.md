@@ -9,8 +9,6 @@
 
 Este repositório contém todos os artefatos do projeto "Cupcake App", desenvolvido para a disciplina de **Projeto Integrador Transdisciplinar em Engenharia de Software II** do curso de Engenharia de Software da Universidade Positivo.
 
----
-
 ## 🚀 Links da Aplicação (Deploy)
 
 - **Frontend (Vercel):** [https://projeto-integrador-cupcake-app.vercel.app](https://projeto-integrador-cupcake-app.vercel.app)
@@ -18,9 +16,7 @@ Este repositório contém todos os artefatos do projeto "Cupcake App", desenvolv
   - _Endpoint de Exemplo (Produtos):_ [https://projeto-integrador-cupcake-app.onrender.com/api/produtos](https://projeto-integrador-cupcake-app.onrender.com/api/produtos)
 - **Credenciais Admin (para teste):**
   - **E-mail:** `admin@cupcake.com`
-  - **Senha:** `admin123` _(ou a senha que você definiu no `data.sql`)_
-
----
+  - **Senha:** `admin123`
 
 ## Tabela de Conteúdos
 
@@ -38,15 +34,11 @@ Este repositório contém todos os artefatos do projeto "Cupcake App", desenvolv
   - [Status Atual e Próximos Passos (SP3)](#status-atual-e-próximos-passos-sp3)
   - [Autor](#autor)
 
----
-
 ## Sobre o Projeto
 
 O **Cupcake App** é uma aplicação web completa projetada para uma confeitaria de cupcakes gourmet. O objetivo é digitalizar o processo de vendas, oferecendo aos clientes uma vitrine virtual, um sistema de pedidos online com pagamento simulado e acompanhamento de entregas. O projeto também inclui um painel administrativo para o gerenciamento de produtos e pedidos.
 
 Este projeto seguiu a metodologia ágil Scrum, com entregas incrementais baseadas em histórias de usuário e um ciclo de melhoria contínua (Kaizen) aplicado após a fase inicial de planejamento. A estrutura do backend segue o padrão Model-View-Controller (MVC).
-
----
 
 ## Principais Funcionalidades (v2.0)
 
@@ -66,8 +58,6 @@ A versão 2.0 do projeto, após a fase de revisão, contempla as seguintes funci
 - **Gerenciamento de Produtos:** Cadastro, edição de informações, controle de estoque e ativação/desativação de cupcakes no catálogo.
 - **Gerenciamento de Pedidos:** Visualização de todos os pedidos recebidos, com filtros por status e capacidade de alterar o andamento da entrega.
 
----
-
 ## Tecnologias Utilizadas
 
 - **Backend:**
@@ -79,15 +69,13 @@ A versão 2.0 do projeto, após a fase de revisão, contempla as seguintes funci
 - **Frontend:**
   - Framework: React com TypeScript
   - Build Tool: Vite
-  - Estilização: Tailwind CSS (assumindo, baseado na estrutura comum do AI Studio)
+  - Estilização: Tailwind CSS
 - **Banco de Dados:** MySQL 8
 - **Hospedagem:**
   - Backend: Render.com (Serviço Web Dockerizado)
   - Frontend: Vercel
   - Database: Aiven (MySQL)
 - **Versionamento:** Git & GitHub
-
----
 
 ## Estrutura do Repositório
 
@@ -104,7 +92,7 @@ O projeto está organizado da seguinte forma:
   - `package.json`: Arquivo de configuração do Node.js/NPM.
   - `tsconfig.json`: Configurações do TypeScript.
   - `vite.config.ts`: Configurações do Vite.
-  - `.env`: Configuração local da API_URL (_no .gitignore_).
+  - `.env`: Configuração local da API*URL (\_no .gitignore*).
 - **`/banco_de_dados`**: Artefatos relacionados à estrutura do banco de dados.
   - `schema.sql` ou `cupcake_db.sql`: Script de criação manual (backup/referência).
   - `DICIONARIO_DE_DADOS.md`: Documentação detalhada do schema.
@@ -112,8 +100,6 @@ O projeto está organizado da seguinte forma:
   - `Especificacao_Agil_Cupcake_App_v2.docx`: Especificação completa do projeto.
   - `REVISAO_E_MELHORIAS.md`: Relatório Kaizen.
   - `/diagramas`: Imagens e códigos Mermaid dos diagramas UML.
-
----
 
 ## Documentação Principal
 
@@ -123,14 +109,10 @@ Os principais artefatos que definem este projeto podem ser encontrados nos links
 - **[📝 Relatório de Revisão e Melhorias (Kaizen)](/documentacao/REVISAO_E_MELHORIAS.md)**
 - **[🗃️ Dicionário de Dados](/banco_de_dados/DICIONARIO_DE_DADOS.md)**
 
----
-
 ## Testes
 
 - **Testes Unitários (Backend):** Foram implementados testes unitários utilizando JUnit e Mockito para validar a lógica de negócio nas classes de Serviço (`/backend/src/test/java`), conforme requisito da SP2. Os testes cobrem as principais operações de Clientes, Produtos e Pedidos.
 - **Testes de Validação (Frontend/Integração):** Estão sendo realizados na Situação-Problema 3, através de testes manuais por pares (colegas), utilizando a aplicação hospedada. O feedback está sendo coletado via Google Forms.
-
----
 
 ## Status Atual e Próximos Passos (SP3)
 
@@ -142,8 +124,6 @@ Os principais artefatos que definem este projeto podem ser encontrados nos links
   - Elaboração do Laudo de Qualidade.
   - Gravação do vídeo final (até 5 min) demonstrando a solução atualizada.
   - Preenchimento e entrega do documento `PIT_atividade.docx`.
-
----
 
 ## Autor
 
