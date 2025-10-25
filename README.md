@@ -31,6 +31,7 @@ Este repositório contém todos os artefatos do projeto "Cupcake App", desenvolv
   - [Estrutura do Repositório](#estrutura-do-repositório)
   - [Documentação Principal](#documentação-principal)
   - [Testes](#testes)
+  - [Testes Unitários (Backend)](#testes-unitários-backend)
   - [Status Atual e Próximos Passos (SP3)](#status-atual-e-próximos-passos-sp3)
   - [Autor](#autor)
 
@@ -111,7 +112,24 @@ Os principais artefatos que definem este projeto podem ser encontrados nos links
 
 ## Testes
 
-- **Testes Unitários (Backend):** Foram implementados testes unitários utilizando JUnit e Mockito para validar a lógica de negócio nas classes de Serviço (`/backend/src/test/java`), conforme requisito da SP2. Os testes cobrem as principais operações de Clientes, Produtos e Pedidos.
+## Testes Unitários (Backend)
+
+[cite_start]Conforme solicitado na Situação-Problema 3[cite: 371], foram implementados testes unitários para a camada de serviço do backend, utilizando JUnit 5 e Mockito, como parte do processo de verificação do código.
+
+As classes de teste implementadas estão localizadas no diretório `/backend/src/test/java` do repositório e incluem:
+
+- `ProdutoServiceTest.java` (6 testes)
+- `ClienteServiceTest.java` (4 testes)
+- `PedidoServiceTest.java` (4 testes)
+
+**Total de Testes:** 15
+
+**Resultado:** Todos os 15 testes unitários passam com sucesso quando executados localmente via `./mvnw test`, confirmando que as lógicas de negócio principais estão funcionando conforme o esperado. Os arquivos de teste foram devidamente versionados no GitHub.
+
+**Evidência da Execução:**
+
+![Resultado dos Testes Unitários]
+
 - **Testes de Validação (Frontend/Integração):** Estão sendo realizados na Situação-Problema 3, através de testes manuais por pares (colegas), utilizando a aplicação hospedada. O feedback está sendo coletado via Google Forms.
 
 ## Status Atual e Próximos Passos (SP3)
