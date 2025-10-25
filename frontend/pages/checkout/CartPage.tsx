@@ -42,7 +42,18 @@ const CartPage: React.FC<CartPageProps> = ({
       </div>
     );
   }
-
+  // 1. NOVA FUNÇÃO: Adiciona a etapa de confirmação
+  const handleRemoveClick = (cupcakeId: number, cupcakeName: string) => {
+    // Mostra o pop-up de confirmação nativo do navegador
+    if (
+      window.confirm(
+        `Tem certeza que deseja remover "${cupcakeName}" do carrinho?`
+      )
+    ) {
+      // Só executa a remoção se o usuário clicar "OK"
+      removeFromCart(cupcakeId);
+    }
+  };
   return (
     <div className="p-4 pb-48">
       <h2 className="text-2xl font-bold text-title mb-4">Meu Carrinho</h2>
@@ -62,11 +73,11 @@ const CartPage: React.FC<CartPageProps> = ({
               <div className="flex items-center border rounded-full w-fit my-1">
                 <button
                   onClick={() =>
-                    updateCartQuantity(item.cupcake.id, item.quantity - 1)
+                    handleRemoveClick(item.cupcake.id, item.cupcake.name)
                   }
-                  className="p-1 text-primary"
+                  className="p-2"
                 >
-                  <MinusIcon className="w-4 h-4" />
+                  <Trash2Icon className="w-5 h-5 text-gray-500 hover:text-red-500" />
                 </button>
                 <span className="px-3 text-sm font-bold">{item.quantity}</span>
                 <button
