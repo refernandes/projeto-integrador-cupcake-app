@@ -1,7 +1,7 @@
 // Local: /frontend/src/pages/catalog/ProductCatalogPage.tsx
 
 import React, { useState, useEffect, useMemo } from "react";
-import type { Cupcake, Route } from "../../types"; // Mantemos seus tipos
+import type { Cupcake, Route } from "../../types";
 import { SearchIcon } from "../../components/Icons";
 import { API_BASE_URL } from "../../src/apiConfig";
 
@@ -16,8 +16,6 @@ interface ProdutoAPI {
   estoque: number;
 }
 
-// O componente agora só precisa das funções de navegação e do carrinho,
-// pois ele mesmo vai buscar os produtos.
 interface ProductCatalogPageProps {
   setRoute: (route: Route) => void;
   addToCart: (cupcake: Cupcake) => void;
@@ -27,20 +25,20 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
   setRoute,
   addToCart,
 }) => {
-  // --- NOSSOS 4 ESTADOS DE CONTROLE ---
+  // --- ESTADOS DE CONTROLE ---
   const [allProducts, setAllProducts] = useState<Cupcake[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   // (SP3.2) Feedback de Adicionar
   const [addingProductId, setAddingProductId] = useState<number | null>(null);
 
-  // --- NOSSOS 3 ESTADOS DE FILTRO/ORDEM ---
+  // --- ESTADOS DE FILTRO/ORDEM ---
   const [filter, setFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
   // (SP3.5) Ordenação
   const [sortBy, setSortBy] = useState("default");
 
-  // ... (useEffect para buscar produtos - NENHUMA MUDANÇA AQUI) ...
+  // ... useEffect para buscar produtos (NENHUMA MUDANÇA) ...
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -72,7 +70,7 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
     fetchProducts();
   }, []);
 
-  // (SP3.2) Função de Feedback - NENHUMA MUDANÇA AQUI
+  // (SP3.2) Função de Feedback (NENHUMA MUDANÇA)
   const handleAddToCartClick = (cupcake: Cupcake) => {
     if (addingProductId === cupcake.id) return;
     setAddingProductId(cupcake.id);
@@ -82,43 +80,37 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
     }, 1500);
   };
 
-  // --- O CÓDIGO PROBLEMÁTICO (AGORA CORRIGIDO) ---
+  // --- useMemos para FILTRAR e ORDENAR ---
   const categories = useMemo(
     () => ["Todos", ...new Set(allProducts.map((c) => c.category))],
     [allProducts]
   );
 
-  // ESTE É O NOVO useMemo CORRETO (SP3.5 + Filtros)
-  const filteredProducts = useMemo(
-    () => {
-      // 1. Lógica de FILTRO original
-      const filtered = allProducts.filter(
-        (p) =>
-          p.stock > 0 &&
-          (filter === "Todos" || p.category === filter) &&
-          p.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  const filteredProducts = useMemo(() => {
+    const filtered = allProducts.filter(
+      (p) =>
+        p.stock > 0 &&
+        (filter === "Todos" || p.category === filter) &&
+        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-      // 2. Lógica de ORDENAÇÃO nova
-      switch (sortBy) {
-        case "price-asc":
-          return filtered.sort((a, b) => a.price - b.price);
-        case "price-desc":
-          return filtered.sort((a, b) => b.price - a.price);
-        case "name-asc":
-          return filtered.sort((a, b) => a.name.localeCompare(b.name));
-        case "name-desc":
-          return filtered.sort((a, b) => b.name.localeCompare(a.name));
-        default:
-          return filtered;
-      }
-    },
-    [allProducts, filter, searchTerm, sortBy] // O array de dependências CORRETO
-  );
+    switch (sortBy) {
+      case "price-asc":
+        return filtered.sort((a, b) => a.price - b.price);
+      case "price-desc":
+        return filtered.sort((a, b) => b.price - a.price);
+      case "name-asc":
+        return filtered.sort((a, b) => a.name.localeCompare(b.name));
+      case "name-desc":
+        return filtered.sort((a, b) => b.name.localeCompare(a.name));
+      default:
+        return filtered;
+    }
+  }, [allProducts, filter, searchTerm, sortBy]);
 
   // --- RENDERIZAÇÃO CONDICIONAL ---
 
-  // (SP3.1) Spinner de Loading
+  // (SP3.1) Spinner de Loading (NENHUMA MUDANÇA)
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center text-center p-10 h-96">
@@ -131,43 +123,90 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
   }
 
   if (error) {
-    // ... (bloco de erro)
+    return (
+      <div className="text-center p-10 text-red-600">
+        <strong>Oops!</strong> {error}
+      </div>
+    );
   }
 
   // --- O JSX FINAL ---
   return (
     <div className="p-4 pt-2">
-      {/* ... (Barra de Busca) ... */}
-      <div className="relative mb-4">{/* ... */}</div>
-
-      <h2 className="text-xl font-serif text-title mb-3">Sabores</h2>
-      {/* ... (Botões de Categoria) ... */}
-      <div className="flex space-x-3 overflow-x-auto pb-3 -mx-4 px-4 no-scrollbar">
-        {/* ... */}
+      {/* Barra de Busca */}
+      <div className="relative mb-4">
+        <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Buscar cupcakes..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full bg-white px-12 py-3 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
+        />
       </div>
 
-      {/* (SP3.5) Dropdown de Ordenação */}
-      <div className="mt-4">
-        <label
-          htmlFor="sort-by"
-          className="text-sm font-semibold text-gray-700 mr-2"
-        >
-          Ordenar por:
-        </label>
-        <select
-          id="sort-by"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-        >
-          <option value="default">Padrão</option>
-          <option value="price-asc">Menor Preço</option>
-          <option value="price-desc">Maior Preço</option>
-          <option value="name-asc">Nome (A-Z)</option>
-          <option value="name-desc">Nome (Z-A)</option>
-        </select>
+      <div className="flex justify-between items-center mt-4">
+        {/* Título "Sabores" */}
+        <h2 className="text-xl font-serif text-title">Sabores</h2>
+
+        {/* (SP3.5) Dropdown de Ordenação (AGORA ESTILIZADO) */}
+        <div className="relative">
+          <select
+            id="sort-by"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="
+              appearance-none 
+              bg-white 
+              border border-gray-200 
+              rounded-lg 
+              px-4 py-2 
+              text-sm 
+              font-semibold 
+              text-body-text 
+              focus:outline-none 
+              focus:ring-2 
+              focus:ring-primary
+              pr-8 
+            "
+          >
+            <option value="default">Ordenar por</option>
+            <option value="price-asc">Menor Preço</option>
+            <option value="price-desc">Maior Preço</option>
+            <option value="name-asc">Nome (A-Z)</option>
+            <option value="name-desc">Nome (Z-A)</option>
+          </select>
+          {/* Seta customizada */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg
+              className="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+            </svg>
+          </div>
+        </div>
       </div>
 
+      {/* (FIX) Botões de Categoria (O CÓDIGO QUE SUMIU ESTÁ DE VOLTA) */}
+      <div className="flex space-x-3 overflow-x-auto py-3 -mx-4 px-4 no-scrollbar">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setFilter(cat)}
+            className={`px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors duration-200 ${
+              filter === cat
+                ? "bg-primary text-white shadow"
+                : "bg-white text-body-text border border-gray-200 hover:bg-gray-100"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Grid de Produtos (com o feedback SP3.2) */}
       <div className="grid grid-cols-2 gap-x-4 gap-y-6 pt-4">
         {filteredProducts.map((cupcake) => (
           <div
