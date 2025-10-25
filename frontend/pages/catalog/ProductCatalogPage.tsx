@@ -31,6 +31,7 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
   const [allProducts, setAllProducts] = useState<Cupcake[]>([]); // Guarda todos os produtos vindos da API
   const [loading, setLoading] = useState<boolean>(true); // Controla a mensagem de "Carregando..."
   const [error, setError] = useState<string | null>(null); // Guarda mensagens de erro
+  const [addingProductId, setAddingProductId] = useState<number | null>(null);
 
   // ESTADOS DE FILTRO (iguais aos que você já tinha):
   const [filter, setFilter] = useState("Todos");
@@ -92,6 +93,18 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
       ),
     [allProducts, filter, searchTerm]
   );
+  // 2. NOVA FUNÇÃO: Encapsula a lógica de adicionar ao carrinho com o feedback
+  const handleAddToCartClick = (cupcake: Cupcake) => {
+    if (addingProductId === cupcake.id) return; // Previne clique duplo
+
+    setAddingProductId(cupcake.id); // Ativa o feedback visual
+    addToCart(cupcake); // Chama sua função original
+
+    // Reseta o botão após 1.5 segundos
+    setTimeout(() => {
+      setAddingProductId(null);
+    }, 1500);
+  };
 
   // --- RENDERIZAÇÃO CONDICIONAL (UX Melhorada) ---
   if (loading) {
@@ -170,10 +183,19 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
                 R$ {cupcake.price.toFixed(2).replace(".", ",")}
               </p>
               <button
-                onClick={() => addToCart(cupcake)}
-                className="mt-auto w-full text-sm font-bold py-2 px-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors"
+                onClick={() => handleAddToCartClick(cupcake)} // Chama a nova função
+                disabled={addingProductId === cupcake.id} // Desativa o botão durante o feedback
+                className={`
+                  mt-auto w-full text-sm font-bold py-2 px-2 rounded-lg text-white transition-colors
+                  ${
+                    addingProductId === cupcake.id
+                      ? "bg-green-500" // Cor de sucesso (verde)
+                      : "bg-primary hover:bg-primary-dark" // Cor padrão (rosa)
+                  }
+                `}
               >
-                Adicionar
+                {/* O texto agora é dinâmico */}
+                {addingProductId === cupcake.id ? "Adicionado!" : "Adicionar"}
               </button>
             </div>
           </div>
