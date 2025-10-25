@@ -73,11 +73,11 @@ const CartPage: React.FC<CartPageProps> = ({
               <div className="flex items-center border rounded-full w-fit my-1">
                 <button
                   onClick={() =>
-                    handleRemoveClick(item.cupcake.id, item.cupcake.name)
+                    updateCartQuantity(item.cupcake.id, item.quantity - 1)
                   }
-                  className="p-2"
+                  className="p-1 text-primary"
                 >
-                  <Trash2Icon className="w-5 h-5 text-gray-500 hover:text-red-500" />
+                  <MinusIcon className="w-4 h-4" />
                 </button>
                 <span className="px-3 text-sm font-bold">{item.quantity}</span>
                 <button
@@ -97,7 +97,9 @@ const CartPage: React.FC<CartPageProps> = ({
               </p>
             </div>
             <button
-              onClick={() => removeFromCart(item.cupcake.id)}
+              onClick={() =>
+                handleRemoveClick(item.cupcake.id, item.cupcake.name)
+              }
               className="p-2"
             >
               <Trash2Icon className="w-5 h-5 text-gray-500 hover:text-red-500" />
