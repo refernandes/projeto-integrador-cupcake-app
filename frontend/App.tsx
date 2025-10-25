@@ -468,7 +468,17 @@ const App: React.FC = () => {
 
   const renderPage = () => {
     if (token && !currentUser && !isAdmin) {
-      return <div className="text-center p-10">Carregando...</div>;
+      // 1. Aplicamos o mesmo padrão do catálogo: flexbox para centralizar
+      return (
+        <div className="flex flex-col items-center justify-center text-center p-10 h-96">
+          {/* 2. Adicionamos o mesmo spinner com Tailwind */}
+          <div className="w-12 h-12 border-4 border-gray-200 border-t-primary rounded-full animate-spin"></div>
+          {/* 3. Trocamos o texto para algo mais adequado ao login */}
+          <p className="mt-4 font-semibold text-title">
+            Carregando seus dados...
+          </p>
+        </div>
+      );
     }
     if (route.name === "adminLogin") {
       return (

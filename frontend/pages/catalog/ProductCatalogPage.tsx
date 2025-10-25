@@ -96,8 +96,14 @@ const ProductCatalogPage: React.FC<ProductCatalogPageProps> = ({
   // --- RENDERIZAÇÃO CONDICIONAL (UX Melhorada) ---
   if (loading) {
     return (
-      <div className="text-center p-10">
-        Carregando nosso delicioso cardápio... 🧁
+      // 1. Alteramos o container para usar flexbox e centralizar tudo
+      <div className="flex flex-col items-center justify-center text-center p-10 h-96">
+        {/* 2. Este é o spinner! Um div simples com bordas e a animação 'animate-spin' do Tailwind */}
+        <div className="w-12 h-12 border-4 border-gray-200 border-t-primary rounded-full animate-spin"></div>
+        {/* 3. Mantemos seu texto original para o usuário saber o que está acontecendo */}
+        <p className="mt-4 font-semibold text-title">
+          Carregando nosso delicioso cardápio... 🧁
+        </p>
       </div>
     );
   }
