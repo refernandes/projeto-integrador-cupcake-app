@@ -128,7 +128,7 @@ As classes de teste implementadas estão localizadas no diretório `/backend/src
 
 **Evidência da Execução:**
 
-![Resultado dos Testes Unitários]
+![Resultado dos Testes Unitários](https://github-production-user-asset-6210df.s3.amazonaws.com/100616022/505629403-ed1ec39f-eddb-4adf-a15e-ab79737e49a1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20251025%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251025T121519Z&X-Amz-Expires=300&X-Amz-Signature=0d7d55e46617bd3742fbb9f020f047f9f40fe3070b6b3d8b757a4bc341254ddb&X-Amz-SignedHeaders=host)
 
 - **Testes de Validação (Frontend/Integração):** Estão sendo realizados na Situação-Problema 3, através de testes manuais por pares (colegas), utilizando a aplicação hospedada. O feedback está sendo coletado via Google Forms.
 
