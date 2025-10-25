@@ -219,6 +219,10 @@ const App: React.FC = () => {
       prevCart.filter((item) => item.cupcake.id !== cupcakeId)
     );
   }, []);
+  // 1. ADICIONAR NOVA FUNÇÃO "clearCart"
+  const clearCart = useCallback(() => {
+    setCart([]); // Simplesmente define o array do carrinho como vazio
+  }, []);
 
   // ==================================================================
   // TRECHO 1 ATUALIZADO: Função addAddress movida para o escopo correto
@@ -591,6 +595,7 @@ const App: React.FC = () => {
             setRoute={setRoute}
             updateCartQuantity={updateCartQuantity}
             removeFromCart={removeFromCart}
+            clearCart={clearCart} // 2. PASSAR A NOVA FUNÇÃO COMO PROP
           />
         );
 

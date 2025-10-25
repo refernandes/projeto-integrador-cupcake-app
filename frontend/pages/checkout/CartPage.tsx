@@ -10,6 +10,7 @@ interface CartPageProps {
   setRoute: (route: Route) => void;
   updateCartQuantity: (cupcakeId: number, quantity: number) => void;
   removeFromCart: (cupcakeId: number) => void;
+  clearCart: () => void; // 1. RECEBER A NOVA PROP
 }
 
 const CartPage: React.FC<CartPageProps> = ({
@@ -17,6 +18,7 @@ const CartPage: React.FC<CartPageProps> = ({
   setRoute,
   updateCartQuantity,
   removeFromCart,
+  clearCart, // 2. DESESTRUTURAR A PROP
 }) => {
   const subtotal = useMemo(
     () =>
@@ -54,9 +56,20 @@ const CartPage: React.FC<CartPageProps> = ({
       removeFromCart(cupcakeId);
     }
   };
+  const handleClearCartClick = () => {
+    if (window.confirm("Tem certeza que deseja esvaziar o carrinho?")) {
+      clearCart();
+    }
+  };
   return (
     <div className="p-4 pb-48">
       <h2 className="text-2xl font-bold text-title mb-4">Meu Carrinho</h2>
+      <button
+        onClick={handleClearCartClick}
+        className="text-sm font-semibold text-red-500 hover:text-red-700"
+      >
+        Esvaziar Carrinho
+      </button>
       <div className="space-y-4">
         {cart.map((item) => (
           <div
